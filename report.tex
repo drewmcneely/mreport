@@ -125,8 +125,8 @@
 % (remove the % in front of) the following two command lines (the ones
 % that have the \ as their second character).
 %
-\degree{MASTER OF SCIENCE}
-\degreeabbr{M.S.}
+\degree{MASTER OF SCIENCE IN ENGINEERING}
+\degreeabbr{M.S.E.}
 
 \masterreport
 
@@ -264,8 +264,13 @@ and to my high school algebra teacher, Mr.\ Russell Crosier
 
 \begin{acknowledgments}		% Optional
 \index{Acknowledgments@\emph{Acknowledgments}}%
-I wish to thank the multitudes of people who helped me. Time would
-fail me to tell of \ldots
+
+There are too many people to list here
+
+My deepest love and gratitute goes to Reina Tanghe for their love, support, and encouragement during my toughest times. Also to Rachel Okpisz, for the same support earlier in my studies.
+My loyalty to my friends, in order of their introductions into my life, each as explosive as the last: Brandon, Rikin, João, Jeff, Matt, Carrie, David, Jordan, and Rosemarijn. For each of you, I can recall specific ways in which you have selflessly provided critical aid in my quest.
+And probably most importantly, I thank my psychiatrist Jed Becker and my therapists Daniel Singelyn and Matt Halvorson. Thanks for your patient-centered approach to treatment, and enthusiastic devotion to treating mental health. 
+Every name listed here has been instrumental, in one form or another, in getting me through this. Thank you.
 \end{acknowledgments}
 
 
@@ -313,18 +318,72 @@ and make adjustments based on changes to the TeX live distribution.
 % of the include statements (something I found helpful in my own
 % dissertation).
 %
-\include{content/chapter-introduction}
+%\include{content/chapter-introduction}
+%
+%\include{content/chapter-instructions}
+%
+%\include{content/chapter-howtouse}
+%
+%\include{content/chapter-makingbib}
+%
+%\include{content/chapter-tables+figs}
+%
+%\include{content/chapter-math}
 
-\include{content/chapter-instructions}
+\chapter{Introduction}
 
-\include{content/chapter-howtouse}
+The goal set forth by this thesis seems ambitious: to introduce a completely new language of uncertainty and information that abstracts away measure theory, probability, etc. and is better primed for computation in estimation and stochastic control algorithms.
+Luckily, much of this language was already developed by much smarter people than the author. This thesis simply presents the language to a certain audience in a slightly more approachable manner, and frames it in the context of engineering problems.
+\chapter{Motivation}
+\section{Assumptions Made in the Kalman Filter}
+\section{Abstract Programming}
 
-\include{content/chapter-makingbib}
+\chapter{Looking at Markov Transition Kernels}
+\section{Recasting the Datatypes}
+\section{The Signature of Kernels}
 
-\include{content/chapter-tables+figs}
+\chapter{Functional Programming}
+\section{Higher Order Functions}
+\section{Higher Order Types and Type Functions}
+\section{Typeclasses and Abstract Base Classes}
 
-\include{content/chapter-math}
+\chapter{Background}
+\section{Category Theory}
+\subsection{Categories}
+\subsection{Functors}
+\subsubsection{Example Functors}
+\subsection{Monoidal Functors}
+\subsection{Natural Transformations}
+\subsection{Monads}
+\subsection{Kleisli Categories}
 
+\section{Markov Categories}
+\subsection{Example: Set}
+\subsection{Kleisli Categories}
+
+\section{String Diagrams}
+\subsection{Explanation of String Diagrams}
+\subsection{Translating String Diagrams into Kernel Compositions}
+
+\section{Bar Notation}
+\subsection{Explanation of Bar Notation}
+\subsection{Translating Bar Notation into String Diagrams}
+
+\chapter{Common Representations of Information Recast into the Language of Markov Categoreis}
+\section{Discrete Probability}
+\section{Gaussian Probability}
+\section{Gaussian Mixtures: A Composition of Discrete and Gaussian Probability}
+\section{Unscented Transform}
+
+\chapter{Programming with Markov Categories}
+\section{Making Datatypes}
+\subsection{Gaussian}
+\subsection{Unscented}
+\subsection{Gaussian Mixtures}
+
+\section{Synthetic Algorithms Used in Estimation and Control}
+\subsection{Filtering}
+\subsection{History Space}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendix/Appendices                                                %
@@ -336,11 +395,11 @@ and make adjustments based on changes to the TeX live distribution.
 \appendices
 \index{Appendices@\emph{Appendices}}%
 
-\include{content/chapter-appendix1}
-
-\include{content/chapter-appendix2}
-
-\include{content/chapter-appendix3}
+%\include{content/chapter-appendix1}
+%
+%\include{content/chapter-appendix2}
+%
+%\include{content/chapter-appendix3}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Generate the index.						     %
