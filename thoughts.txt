@@ -1,0 +1,13 @@
+Put this in the intro:
+These methods do not actually remove the net difficulty in generating estimation and stochastic control algorithms. It merely moves the difficulty from analysis to conceptualization.
+There is a conceptual investment that must be made, as this method contains abstractions, but I argue that the payout is well worth it.
+This is because it removes the cumbersomeness of working with pdfs, keeping track of time indices in bar notation, integrals, pages of algebra, and all that jazz.
+It also gives you two immensely powerful languages, one graphic and one symbolic, that hlep the engineer visualize and understand estimation much more effectively in my opinion.
+
+The process of deriving estimators, etc. are also much more systematic.
+The fundamental difficulties are still there, but they are just shed of their baggage.
+There are effectively two difficult parts to deriving an estimation algorithm: propagation and bayesian inversion.
+These techniques simply separate the baggage into simple problems, and reduce these difficult things down to their infemum level of difficulty.
+The problem of propagation is reduced to composition (actually I'd say it's generalized to composition), and bayesian inversion is reduced to conditioning.
+What was difficult about propogation and inversion is unchanged in composition and conditioning, it's just that the extra baggage of finding joint distributions in state and measurement, the confusion (at least my confusion) of expected measurement vs actual measurement, are separated into their own easy-to-visualize simple little problems.
+This is because the inverting filter is simply a collection of priors, models, copies, delets, and measurements that are all composed, tensored, and conditioned at each timestep.
