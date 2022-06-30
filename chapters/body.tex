@@ -67,12 +67,66 @@ We wish to take this viewpoint and run with it, generalizing into many different
 \subsection{Kleisli Categories}
 
 \section{Markov Categories}
+
+\newcommand{\id}{\mathrm{id}}
+\newcommand{\comul}{\Delta}
+\newcommand{\counit}{\delta}
+
 \subsection{Example: Set}
 \subsection{Kleisli Categories}
 
 \section{String Diagrams}
+
+String diagrams are very similar to the signal flow diagrams or block diagrams found in control systems.
+Others (\cite{baez2015control}, \cite{fong2016thesis}, \cite{fong2016dynamicalsystems}) have drawn the connections between string diagrams and various diagrams in systems engineering including block diagrams for dynamical systems.
+
+There are often two interpretations in block diagrams:
+In what I will call the temporal interpretation, the state of a diagram can be seen as changing over time, where the states are carried by the wires from block to block. The blocks represent state transformations, which are applied continuously to their inputs to generate changing outputs.
+There may be blocks which carry their own internal state, such as integrators, that keep track of quantities over time to affect their output (THIS SENTENCE SUCKS)
+
+In what I'll call the signal flow interpretation, a time-varying signal is seen as a single entity, and the blocks represent signals in transformation space. This interpretation allows for a more functional analysis type approach to control design.
+
+String diagrams look quite similar to block diagrams, but their interpretation is very different.
+Blocks are still seen as transformations, but they then become the primary point of interest instead of the "signals" themselves.
+The wires do not represent signals, but rather state spaces.
+Whenever a wire splits, or disappears, or loops around, that becomes interpreted as a special transformation itself.
+With this interpretation, a string diagram simply becomes a tool to draw out complicated compositions of transformations, or morphisms in a symmetric monoidal category.
+
 \subsection{Explanation of String Diagrams}
+
 \subsection{Translating String Diagrams into Kernel Compositions}
+String diagrams allow us to write complicated equations with a single picture that can then be systematically translated back into equations for computation.
+These pictures are often much clearer to interpret, and easier to memorize as they can be puzzle pieced together.
+Interpreting them is straightforward: Take the example problem of finding the conditional of a kernel with respect to part of its output.
+This problem statement carries with it the nuance of the complexity in finding conditionals, unlike the simple measure theoretic definition.
+
+Given $f:A\rightarrow X\otimes Y$, find $f_X : X\otimes A \rightarrow Y$ such that the equation in Figure \ref{fig:conditional} holds.
+
+\begin{figure}
+\label{fig:conditional}
+\includegraphics[width=0.5\textwidth]{conditional}
+\end{figure}
+
+\begin{figure}
+\label{fig:conditional-compositions}
+\includegraphics[width=0.5\textwidth]{conditional-compositions}
+\end{figure}
+
+\begin{figure}
+\label{fig:conditional-parallel-compositions}
+\includegraphics[width=0.5\textwidth]{conditional-parallel-compositions}
+\end{figure}
+
+\begin{equation}
+\label{eq:conditional-compositions}
+f = (\counit_X \otimes f) \circ (\comul_X \otimes \id_A)
+\circ (\id_X \otimes \counit_Y \otimes \id_A) \circ (f \otimes \id_A) \circ \comul_A
+\end{equation}
+
+\begin{equation}
+\label{eq:conditional-parallel-compositions}
+f = (\id_x \otimes f_x) \circ \left[\left(\comul_x \circ (\id_x\otimes \counit_Y) \circ f\right) \otimes \id_A\right] \circ \comul_A
+\end{equation}
 
 \section{Bar Notation}
 \subsection{Explanation of Bar Notation}

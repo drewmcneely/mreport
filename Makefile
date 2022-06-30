@@ -12,6 +12,7 @@ reportfile=report
 files = ${reportfile}.tex
 
 diss:
+		#latexmk -pdf
 		pdflatex ${reportfile}
 		biblatex ${reportfile}||true
 		pdflatex ${reportfile}
