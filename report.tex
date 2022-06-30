@@ -339,7 +339,48 @@ Luckily, much of this language was already developed by much smarter people than
 \section{Abstract Programming}
 
 \chapter{Looking at Markov Transition Kernels}
+
+There is often some conflation between conditionals and transition kernels.
+In a way, they are often considered to be developments from the basics of probability.
+This stems from the fact that in traditional probability theory, the probability distribution or probability measure is the fundamental notion from which all other definitions and developments are derived.
+Similar to how in categorical thinking, where the perspective is switched from sets being fundamental to functions being fundamental, we want to change lenses away distributions and onto kernels as being the most elemental construction from which distributions, statistics, and algorithms are derived. 
+Of course, it significantly helps us in our understanding if we already have some insight into a traditional measure-theoretic way of thinking about probability, but this is not totally necessary.
+It more serves as a grounding point, similar to when learning category theory -- it helps greatly to already be familiar with sets+functions, vector spaces+linear maps, topoligical spaces+continuous maps, groups+group homomorphisms, and so on so that we have a \emph{context} for where categories are really useful as a language to describe stuff intead of only this abstract notion of arrows and objects and categories of categories.
+
+Before giving a formal definition of categories, we should just mention for the familiarity of the reader that a category is made of arrows called \emph{morphisms} that are useful in describing mappings between spaces. In categorical probability, these morphisms can describe \emph{mappings that behave like Markov transition kernels}.
+
+But what exactly is a transition kernel?
+Intuition would say that it is a mapping between distributions, but there is a bit more nuance than that.
+
+\newcommand{\normal}{\mathcal{N}}
+\newcommand{\reals}{\mathds{R}}
+\begin{equation}
+\label{traditional-gaussian-model}
+\begin{gathered}
+    y &= Fx + w \\
+    w &\sim \normal(\bar{w}, R)
+\end{gathered}
+\end{equation}
+
+\begin{equation}
+    \begin{aligned}
+	y = f(x,w)
+    \end{aligned}
+\end{equation}
+
+One minor change to our langauge that can have significant impact is in the recasting of equations into functions (expand on this).
+
 \section{Recasting the Datatypes}
+The trouble with random variables:
+Random variables suck. Here's why.
+
+Random variables are often pitched to the student as variables that take on values (ie.\ real numbers) in a random fashion.
+There is a frequentist sort of nature to this description, as if a random variable is a number that changes its value every time you look at it.
+
+There is an alternative viewpoint: what is often called the Bayesian view of probability.
+It states that probability (of an event) is simply a measure of our belief in a state, or more specifically the amount we believe that a state will fall into that event.
+We wish to take this viewpoint and run with it, generalizing into many different ways of characterizing our belief or information on the state of a system.
+
 \section{The Signature of Kernels}
 
 \chapter{Functional Programming}
