@@ -330,102 +330,7 @@ and make adjustments based on changes to the TeX live distribution.
 %
 %\include{content/chapter-math}
 
-\chapter{Introduction}
-
-The goal set forth by this thesis seems ambitious: to introduce a completely new language of uncertainty and information that abstracts away measure theory, probability, etc. and is better primed for computation in estimation and stochastic control algorithms.
-Luckily, much of this language was already developed by much smarter people than the author. This thesis simply presents the language to a certain audience in a slightly more approachable manner, and frames it in the context of engineering problems.
-\chapter{Motivation}
-\section{Assumptions Made in the Kalman Filter}
-\section{Abstract Programming}
-
-\chapter{Looking at Markov Transition Kernels}
-
-There is often some conflation between conditionals and transition kernels.
-In a way, they are often considered to be developments from the basics of probability.
-This stems from the fact that in traditional probability theory, the probability distribution or probability measure is the fundamental notion from which all other definitions and developments are derived.
-Similar to how in categorical thinking, where the perspective is switched from sets being fundamental to functions being fundamental, we want to change lenses away distributions and onto kernels as being the most elemental construction from which distributions, statistics, and algorithms are derived. 
-Of course, it significantly helps us in our understanding if we already have some insight into a traditional measure-theoretic way of thinking about probability, but this is not totally necessary.
-It more serves as a grounding point, similar to when learning category theory -- it helps greatly to already be familiar with sets+functions, vector spaces+linear maps, topoligical spaces+continuous maps, groups+group homomorphisms, and so on so that we have a \emph{context} for where categories are really useful as a language to describe stuff intead of only this abstract notion of arrows and objects and categories of categories.
-
-Before giving a formal definition of categories, we should just mention for the familiarity of the reader that a category is made of arrows called \emph{morphisms} that are useful in describing mappings between spaces. In categorical probability, these morphisms can describe \emph{mappings that behave like Markov transition kernels}.
-
-But what exactly is a transition kernel?
-Intuition would say that it is a mapping between distributions, but there is a bit more nuance than that.
-
-\newcommand{\normal}{\mathcal{N}}
-\newcommand{\reals}{\mathds{R}}
-\begin{equation}
-\label{traditional-gaussian-model}
-\begin{gathered}
-    y &= Fx + w \\
-    w &\sim \normal(\bar{w}, R)
-\end{gathered}
-\end{equation}
-
-\begin{equation}
-    \begin{aligned}
-	y = f(x,w)
-    \end{aligned}
-\end{equation}
-
-One minor change to our langauge that can have significant impact is in the recasting of equations into functions (expand on this).
-
-\section{Recasting the Datatypes}
-The trouble with random variables:
-Random variables suck. Here's why.
-
-Random variables are often pitched to the student as variables that take on values (ie.\ real numbers) in a random fashion.
-There is a frequentist sort of nature to this description, as if a random variable is a number that changes its value every time you look at it.
-
-There is an alternative viewpoint: what is often called the Bayesian view of probability.
-It states that probability (of an event) is simply a measure of our belief in a state, or more specifically the amount we believe that a state will fall into that event.
-We wish to take this viewpoint and run with it, generalizing into many different ways of characterizing our belief or information on the state of a system.
-
-\section{The Signature of Kernels}
-
-\chapter{Functional Programming}
-\section{Higher Order Functions}
-\section{Higher Order Types and Type Functions}
-\section{Typeclasses and Abstract Base Classes}
-
-\chapter{Background}
-\section{Category Theory}
-\subsection{Categories}
-\subsection{Functors}
-\subsubsection{Example Functors}
-\subsection{Monoidal Functors}
-\subsection{Natural Transformations}
-\subsection{Monads}
-\subsection{Kleisli Categories}
-
-\section{Markov Categories}
-\subsection{Example: Set}
-\subsection{Kleisli Categories}
-
-\section{String Diagrams}
-\subsection{Explanation of String Diagrams}
-\subsection{Translating String Diagrams into Kernel Compositions}
-
-\section{Bar Notation}
-\subsection{Explanation of Bar Notation}
-\subsection{Translating Bar Notation into String Diagrams}
-
-\chapter{Common Representations of Information Recast into the Language of Markov Categoreis}
-\section{Discrete Probability}
-\section{Gaussian Probability}
-\section{Gaussian Mixtures: A Composition of Discrete and Gaussian Probability}
-\section{Unscented Transform}
-
-\chapter{Programming with Markov Categories}
-\section{Making Datatypes}
-\subsection{Gaussian}
-\subsection{Unscented}
-\subsection{Gaussian Mixtures}
-
-\section{Synthetic Algorithms Used in Estimation and Control}
-\subsection{Filtering}
-\subsection{History Space}
-
+\include{chapters/body}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Appendix/Appendices                                                %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -482,22 +387,15 @@ We wish to take this viewpoint and run with it, generalizing into many different
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{vita}
-Craig William McCluskey
-was born in Minneapolis, Minnesota on 20 May 1950, the son of
-Dr. William R. McCluskey and Lucilla W. McCluskey.  He received the Bachelor
-of Science degree in Engineering from the California Institute of Technology
-and was commissioned an Officer in the United States Air Force in 1971.
-He entered active duty in October, 1971, and was stationed in Denver, Colorado,
-Colorado Springs, Colorado, Panama City, Florida, and Sacramento, California.
-He separated from the USAF in 1975 and worked as an engineer for several small
-electronics companies in California before moving to Colorado Springs, Colorado
-to work for Hewlett-Packard in 1979. He left Hewlett-Packard in 1989 and joined
-a small company based in Herndon, Virginia, working out of his house as a
-``remote'' engineer designing parts of the Alexis satellite for Los Alamos
-National Laboratories. Laid off when his portion of the satellite was
-completed, he applied to the University of Texas at Austin for enrollment
-in their physics program. He was accepted and started graduate studies in
-August, 1991.
+Drew Allen McNeely
+was born in Houston, Texas on 26 March 1993, the son of
+Wesley Stephen McNeely and Dr. Sandra Scott Lee. He received two Bachelor
+of Science degrees in Aerospace and Mechanical Engineering from
+Missouri University of Science and Technology in Rolla, MO in December 2015.
+He enrolled briefly in the graduate program there under Dr. Tansel Yucelen
+before transferring to The University of Arizona in Tucson, AZ to work under
+Drs. David Gaylor and Moriba Jah. He transferred to The University of Texas
+at Austin under Dr. Jah in the Fall of 2017.
 \end{vita}
 
 \end{document}
