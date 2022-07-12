@@ -6,6 +6,11 @@ Luckily, much of this language was already developed by much smarter people than
 \section{Assumptions Made in the Kalman Filter}
 \section{Abstract Programming}
 
+\begin{figure}
+    \label{fig:algorithm-inheritance}
+    \includegraphics[width=0.5\textwidth]{algorithm-inheritance}
+\end{figure}
+
 \chapter{Looking at Markov Transition Kernels}
 
 There is often some conflation between conditionals and transition kernels.
@@ -40,7 +45,7 @@ One minor change to our langauge that can have significant impact is in the reca
 
 \section{Recasting the Datatypes}
 The trouble with random variables:
-Random variables suck. Here's why.
+Random variables suck. Here's why...
 
 Random variables are often pitched to the student as variables that take on values (ie.\ real numbers) in a random fashion.
 There is a frequentist sort of nature to this description, as if a random variable is a number that changes its value every time you look at it.
@@ -49,7 +54,43 @@ There is an alternative viewpoint: what is often called the Bayesian view of pro
 It states that probability (of an event) is simply a measure of our belief in a state, or more specifically the amount we believe that a state will fall into that event.
 We wish to take this viewpoint and run with it, generalizing into many different ways of characterizing our belief or information on the state of a system.
 
+\newcommand{\gaussian}{\mathcal{N}}
+\newcommand{\gausscat}{\mathrm{Gauss}}
+Given a real finite dimensional vector space $X$, we will define for now\footnote{This and the treatment in \ref{sec:kernel-signature} looks like we're setting up $\gaussian$ as a functor for forumulating $\gausscat$ as a Kleisli category. It's well conjectured that $\gausscat$ is not a Kleisli category. For demonstration purposes however, I'm setting it up like one here to introduce readers to the concept using familiar constructions. We will discuss decorated maps a-l\`a \cite{stein2022extended} later.} the collection of Gaussian distributions on $X$.
+For the practical purposes of making datatypes, it's sufficient to define it through its parameterization of a mean and covariance as opposed to defining it as the actual collection of Gaussian probability measures.
+Thus, we define $\gaussian$ as a type-level\footnote{Defined later in our discussion of functional programming} mapping on vector spaces:
+
+\newcommand{\symmetric}{\mathds{S}}
+\begin{equation}
+    \gaussian : X \mapsto \{(x,P) : x\in X, P \in \symmetric^X_+\}
+\end{equation}
+
 \section{The Signature of Kernels}
+\label{sec:kernel-signature}
+
+One confusing aspect of Markov transition kernels is their signature. 
+Standard texts describe the a kernel as the following:
+
+insert definition here
+
+The important bit is in the partial application: parameterizing $\kappa$ with $x$, the function $\kappa(\cdot, x)$ is a probability measure from $\mathcal{B} \rightarrow [0,1]$ and parameterizing with $B\in \mathcal{B}$, the function $\kappa(B,\cdot)$ is a \emph{mapping whose domain is $X$}.
+This is important: $\kappa$ does not input values of distributions, but rather values of state.
+This is evident in the confusing bar notation: $p(y|x)$ reads as ``$p$ of $y$ given $x$".
+In other words, the transition kernel gives a distribution on $Y$ given a fixed value of $x\in X$.
+
+\newcommand{\giry}{\mathcal{P}}
+Using Currying ie.\ partial application, we can rewrite this signature. 
+Since $\giry Y$ is defined to be the collection of distributions on $Y$, then there is an equivalence between $\kappa : \mathcal{B} \times X \rightarrow [0,1]$ and $\kappa : X \rightarrow \giry Y$.
+
+We can give the same treatment to Gaussian models of the form in Equation \ref{eq:traditional-gaussian-model} in Kalman filters, which are also just Markov kernels. The maps just happen to be linear and the distributions gaussian.
+While we treat $x$ as a random variable in $y = Fx + w$, the $F$ does not take in random variables.
+It takes plain old vectors.
+We had to do the work of figuring out how to propagate covariance through $F$.
+Further, \ref{eq:traditional-gaussian-model} injects its own distribution into the codomain through $w$.
+
+\textbf{Say something about frequentist statistics}
+
+Using a similar approach to above, let's recast the signature into the new datatype.
 
 \chapter{Functional Programming}
 \section{Higher Order Functions}
