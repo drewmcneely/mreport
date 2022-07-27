@@ -2,13 +2,28 @@
 
 The goal set forth by this thesis seems ambitious: to introduce a completely new language of uncertainty and information that abstracts away measure theory, probability, etc. and is better primed for computation in estimation and stochastic control algorithms.
 Luckily, much of this language was already developed by much smarter people than the author. This thesis simply presents the language to a certain audience in a slightly more approachable manner, and frames it in the context of engineering problems.
+
+Here, we also explicitly formulate certain problems such as estimation filters and stochastic control in this language.
+
+This report is more philosophical in nature, and errs on the side of arguing for a change in pedagogy.
+This report is definitely more ``big picture'', and does not dive into much of the finer nuances of control and estimation.\todo{write this better}
+
+\todo{expand the introduction.}
+
 \chapter{Motivation}
+
+Deriving new estimation algorithms is hard.
+This methodology distills the complex bits into elemental building blocks.
+
+\todo[inline]{Make a list with a breakdown of the markov category axiom methods}
+
 \section{Assumptions Made in the Kalman Filter}
 \section{Abstract Programming}
 
-\begin{figure}
-    \label{fig:algorithm-inheritance}
+\begin{figure}[htb]
     \includegraphics[width=0.5\textwidth]{algorithm-inheritance}
+	\caption{}
+    \label{fig:algorithm-inheritance}
 \end{figure}
 
 \chapter{Looking at Markov Transition Kernels}
@@ -40,8 +55,12 @@ Intuition would say that it is a mapping between distributions, but there is a b
 	y = f(x,w)
     \end{aligned}
 \end{equation}
+\todo{Talk about how this has randomness pushback}
+\todo[inline]{Talk about how the frequentist view of these kernels sees that w gets sampled in the instant that y gets evaluated, and acts as a modifier to Fx. We want to change this to a Bayesian view, where F evaluates by taking in an x and returning a distribution. A p(y|x) kind of thing. The problem is that bar notation, tilde notation, and distributions in the Bayesian context SUCK. This is where the functors come in.}
 
-One minor change to our langauge that can have significant impact is in the recasting of equations into functions (expand on this).
+\todo{List a bunch of variations on kernels, and discuss them.}
+
+One minor change to our langauge that can have significant impact is in the recasting of equations into functions\todo{expand on this}.
 
 \section{Recasting the Datatypes}
 The trouble with random variables:
@@ -71,7 +90,7 @@ Thus, we define $\gaussian$ as a type-level\footnote{Defined later in our discus
 One confusing aspect of Markov transition kernels is their signature. 
 Standard texts describe the a kernel as the following:
 
-insert definition here
+\todo{markov kernel definition}
 
 The important bit is in the partial application: parameterizing $\kappa$ with $x$, the function $\kappa(\cdot, x)$ is a probability measure from $\mathcal{B} \rightarrow [0,1]$ and parameterizing with $B\in \mathcal{B}$, the function $\kappa(B,\cdot)$ is a \emph{mapping whose domain is $X$}.
 This is important: $\kappa$ does not input values of distributions, but rather values of state.
@@ -79,7 +98,7 @@ This is evident in the confusing bar notation: $p(y|x)$ reads as ``$p$ of $y$ gi
 In other words, the transition kernel gives a distribution on $Y$ given a fixed value of $x\in X$.
 
 \newcommand{\giry}{\mathcal{P}}
-Using Currying ie.\ partial application, we can rewrite this signature. 
+Using Currying ie.\ partial application\todo{expand on this?}, we can rewrite this signature. 
 Since $\giry Y$ is defined to be the collection of distributions on $Y$, then there is an equivalence between $\kappa : \mathcal{B} \times X \rightarrow [0,1]$ and $\kappa : X \rightarrow \giry Y$.
 
 We can give the same treatment to Gaussian models of the form in Equation \ref{eq:traditional-gaussian-model} in Kalman filters, which are also just Markov kernels. The maps just happen to be linear and the distributions gaussian.
@@ -88,12 +107,17 @@ It takes plain old vectors.
 We had to do the work of figuring out how to propagate covariance through $F$.
 Further, \ref{eq:traditional-gaussian-model} injects its own distribution into the codomain through $w$.
 
-\textbf{Say something about frequentist statistics}
+\todo[inline]{Say something about frequentist statistics}
 
 Using a similar approach to above, let's recast the signature into the new datatype.
 
+\todo[inline]{Talk about how the kernel $\kappa$ has a signature $\mathcal{B}\times X \rightarrow [0,1]$, but we can equivalently formulate it as $\kappa : X \rightarrow \mathcal{P} Y$}
+
 \chapter{Functional Programming}
 \section{Higher Order Functions}
+
+A powerful feature of the functional programming paradigm and the first class citizenship of functions is that 
+
 \section{Higher Order Types and Type Functions}
 \section{Typeclasses and Abstract Base Classes}
 
@@ -123,7 +147,7 @@ Others (\cite{baez2015control}, \cite{fong2016thesis}, \cite{fong2016dynamicalsy
 
 There are often two interpretations in block diagrams:
 In what I will call the temporal interpretation, the state of a diagram can be seen as changing over time, where the states are carried by the wires from block to block. The blocks represent state transformations, which are applied continuously to their inputs to generate changing outputs.
-There may be blocks which carry their own internal state, such as integrators, that keep track of quantities over time to affect their output (THIS SENTENCE SUCKS)
+There may be blocks which carry their own internal state, such as integrators, that keep track of quantities over time to affect their output\todo{This sentence sucks.}
 
 In what I'll call the signal flow interpretation, a time-varying signal is seen as a single entity, and the blocks represent signals in transformation space. This interpretation allows for a more functional analysis type approach to control design.
 
@@ -143,19 +167,25 @@ This problem statement carries with it the nuance of the complexity in finding c
 
 Given $f:A\rightarrow X\otimes Y$, find $f_X : X\otimes A \rightarrow Y$ such that the equation in Figure \ref{fig:conditional} holds.
 
-\begin{figure}
-\label{fig:conditional}
-\includegraphics[width=0.5\textwidth]{conditional}
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{conditional}
+	\caption{The string diagram equation for the definition of conditioning.}
+	\label{fig:conditional}
 \end{figure}
 
-\begin{figure}
-\label{fig:conditional-compositions}
-\includegraphics[width=0.5\textwidth]{conditional-compositions}
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{conditional-compositions}
+	\caption{The conditional equation is read like so. This corresponds to Equation \ref{eq:conditional-compositions}.}
+	\label{fig:conditional-compositions}
 \end{figure}
 
-\begin{figure}
-\label{fig:conditional-parallel-compositions}
-\includegraphics[width=0.5\textwidth]{conditional-parallel-compositions}
+\begin{figure}[htb]
+	\centering
+	\includegraphics[width=0.5\textwidth]{conditional-parallel-compositions}
+	\caption{The conditional equation can also be read this way. This corresponds to Equation \ref{eq:conditional-parallel-compositions}.}
+	\label{fig:conditional-parallel-compositions}
 \end{figure}
 
 \begin{equation}
