@@ -73,8 +73,6 @@ We then get our posterior estimate
 	\hat{P} = (I-KH)\bar{P}
 \end{align}
 
-** Maybe something simpler? KF assumes white Gaussian noise. Is this assumption present in the framework you have in mind? Can you for instance handle the estimation problem (at least in principle) with colored noise? **
-
 \section{Abstract Programming}
 
 \begin{figure}[htb]
@@ -97,6 +95,8 @@ Before giving a formal definition of categories, we should just mention for the 
 But what exactly is a transition kernel?
 Intuition would say that it is a mapping between distributions, but there is a bit more nuance than that. ** Add some text to introduce these equations **
 
+\todo[inline]{List all the different types of transition kernels you've seen and talk about their differences and similarities. The goal here is to show how they can be unified into the categorical framework.}
+
 \begin{equation}
 \label{traditional-gaussian-model}
 \begin{gathered}
@@ -112,8 +112,6 @@ Intuition would say that it is a mapping between distributions, but there is a b
 \end{equation}
 \todo{Talk about how this has randomness pushback}
 \todo[inline]{Talk about how the frequentist view of these kernels sees that w gets sampled in the instant that y gets evaluated, and acts as a modifier to Fx. We want to change this to a Bayesian view, where F evaluates by taking in an x and returning a distribution. A p(y|x) kind of thing. The problem is that bar notation, tilde notation, and distributions in the Bayesian context SUCK (** this is your personal view point; be more ``diplomatic''; explain why is that **). This is where the functors come in.}
-
-\todo{List a bunch of variations on kernels, and discuss them.}
 
 One minor change to our language that can have significant impact is in the recasting of equations into functions\todo{expand on this}.
 
