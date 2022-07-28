@@ -6,18 +6,20 @@ Luckily, much of this language was already developed by much smarter people than
 Here, we also explicitly formulate certain problems such as estimation filters and stochastic control in this language.
 
 This report is more philosophical in nature, and errs on the side of arguing for a change in pedagogy.
-This report is definitely more ``big picture'', and does not dive into much of the finer nuances of control and estimation.\todo{write this better}
+This report is definitely more ``big picture'', and does not dive into much of the finer nuances of control and estimation. (** E.B. no need to be so apologetic. Say what you want to say but do not ``encourage'' the reader to view this work as philosophical rather than technical **.\todo{write this better}
 
 \todo{expand the introduction.}
 
 \chapter{Motivation}
 
-Deriving new estimation algorithms is hard.
-This methodology distills the complex bits into elemental building blocks.
+Deriving new estimation algorithms is hard. ** E.B. Why is hard? Explain to me the key challenges** 
+This methodology (** which methodology? **) distills the complex bits into elemental building blocks.
 
-\todo[inline]{Make a list with a breakdown of the markov category axiom methods}
+\todo[inline]{Make a list with a breakdown of the Markov category axiom methods}
 
 \section{Assumptions Made in the Kalman Filter}
+** Do you want to devote a whole section on the assumptions of KF or present it quickly (in  a way that will facilitate the subsequent discussion) together with each assumptions? ** 
+
 \section{Abstract Programming}
 
 \begin{figure}[htb]
@@ -31,9 +33,9 @@ This methodology distills the complex bits into elemental building blocks.
 There is often some conflation between conditionals and transition kernels.
 In a way, they are often considered to be developments from the basics of probability.
 This stems from the fact that in traditional probability theory, the probability distribution or probability measure is the fundamental notion from which all other definitions and developments are derived.
-Similar to how in categorical thinking, where the perspective is switched from sets being fundamental to functions being fundamental, we want to change lenses away distributions and onto kernels as being the most elemental construction from which distributions, statistics, and algorithms are derived. 
+Similar to how in categorical thinking, where the perspective is switched from sets being fundamental to functions being fundamental, we want to change lenses away from distributions and onto kernels as being the most elemental construction from which distributions, statistics, and algorithms are derived. 
 Of course, it significantly helps us in our understanding if we already have some insight into a traditional measure-theoretic way of thinking about probability, but this is not totally necessary.
-It more serves as a grounding point, similar to when learning category theory -- it helps greatly to already be familiar with sets+functions, vector spaces+linear maps, topoligical spaces+continuous maps, groups+group homomorphisms, and so on so that we have a \emph{context} for where categories are really useful as a language to describe stuff intead of only this abstract notion of arrows and objects and categories of categories.
+It more serves as a grounding point, similar to when learning category theory -- it helps greatly to already be familiar with sets+functions, vector spaces+linear maps, topoligical spaces+continuous maps, groups+group homomorphisms, and so on so that we have a \emph{context} for where categories are really useful as a language to describe stuff instead of only this abstract notion of arrows and objects and categories of categories.
 
 Before giving a formal definition of categories, we should just mention for the familiarity of the reader that a category is made of arrows called \emph{morphisms} that are useful in describing mappings between spaces. In categorical probability, these morphisms can describe \emph{mappings that behave like Markov transition kernels}.
 
@@ -60,7 +62,7 @@ Intuition would say that it is a mapping between distributions, but there is a b
 
 \todo{List a bunch of variations on kernels, and discuss them.}
 
-One minor change to our langauge that can have significant impact is in the recasting of equations into functions\todo{expand on this}.
+One minor change to our language that can have significant impact is in the recasting of equations into functions\todo{expand on this}.
 
 \section{Recasting the Datatypes}
 The trouble with random variables:
@@ -75,7 +77,7 @@ We wish to take this viewpoint and run with it, generalizing into many different
 
 \newcommand{\gaussian}{\mathcal{N}}
 \newcommand{\gausscat}{\mathrm{Gauss}}
-Given a real finite dimensional vector space $X$, we will define for now\footnote{This and the treatment in \ref{sec:kernel-signature} looks like we're setting up $\gaussian$ as a functor for forumulating $\gausscat$ as a Kleisli category. It's well conjectured that $\gausscat$ is not a Kleisli category. For demonstration purposes however, I'm setting it up like one here to introduce readers to the concept using familiar constructions. We will discuss decorated maps a-l\`a \cite{stein2022extended} later.} the collection of Gaussian distributions on $X$.
+Given a real finite dimensional vector space $X$, we will define for now\footnote{This and the treatment in \ref{sec:kernel-signature} looks like we're setting up $\gaussian$ as a functor for formulating $\gausscat$ as a Kleisli category. It's well conjectured that $\gausscat$ is not a Kleisli category. For demonstration purposes however, I'm setting it up like one here to introduce readers to the concept using familiar constructions. We will discuss decorated maps a-l\`a \cite{stein2022extended} later.} the collection of Gaussian distributions on $X$.
 For the practical purposes of making datatypes, it's sufficient to define it through its parameterization of a mean and covariance as opposed to defining it as the actual collection of Gaussian probability measures.
 Thus, we define $\gaussian$ as a type-level\footnote{Defined later in our discussion of functional programming} mapping on vector spaces:
 
@@ -203,7 +205,7 @@ f = (\id_x \otimes f_x) \circ \left[\left(\comul_x \circ (\id_x\otimes \counit_Y
 \subsection{Explanation of Bar Notation}
 \subsection{Translating Bar Notation into String Diagrams}
 
-\chapter{Common Representations of Information Recast into the Language of Markov Categoreis}
+\chapter{Common Representations of Information Recast into the Language of Markov Categories}
 \section{Discrete Probability}
 \section{Gaussian Probability}
 \section{Gaussian Mixtures: A Composition of Discrete and Gaussian Probability}
