@@ -124,6 +124,32 @@ A powerful feature of the functional programming paradigm and the first class ci
 \chapter{Background}
 \section{Category Theory}
 \subsection{Categories}
+
+A category formally is a collection of objects and morphisms that follow a composition law \cite{context}. \todo{Expand on this. Should I give an actual definition of an abstract category? I probably should}
+
+While this definition is very abstract, it is useful in describing a lot of things \todo{find a better word} in mathematics.
+Some of the most useful categories for application are \emph{concrete} categories, which practically are categories whose objects spaces with some form of structure and morphisms are structure preserving mappings between them.
+
+\newcommand{\Set}{\mathrm{Set}}
+\newcommand{\FinVect}{\mathrm{FinVect}_{\mathds{R}}}
+
+\missingfigure{Make a diagram to represent a few objects/morphisms in $\Set$.}
+\missingfigure{Make a diagram to represent a few objects/morphisms in $\FinVect$. Make it look congruent to $\Set$.}
+
+An example is shown in $\Set$ and $\FinVect$.
+The category $\Set$ has sets as its objects, and its morphisms are functions.
+The category $\FinVect$ has as its objects finite dimensional vector spaces over the real numbers as their bed of scalars, and its morphisms are linear transformations\footnote{These transformations can be represented by a matrix, but only if a basis is provided for both domain and codomain. We should not automatically assume a vector space has a canonical basis that's best for the job!}.
+Note that $\FinVect$ is just a subcategory\footnote{I won't define it, but I hope it's not hard to imagine what a subcategory is. Closure under composition is the main requirement.} of $\Set$. This is talked about in more detail in books.\todo{Specify}
+
+This view is different from a set theoretic approach to fields in mathematics.
+For instance, the set theoretic approach to linear algebra would define a vector space as a set with a certain algebraic structure, and a linear transformation as a function preserving that structure in a certain way.
+A categorical approach would instead define the category of vector spaces as a collection of objects (the vector spaces) and of morphisms\footnote{and of functors. more on that later}, and would specify how morphisms behave in composition.
+This approach is described as "context rich and content poor"\todo{cite youtube video}
+\todo[inline]{Finish this paragraph. Element poor, but we can get around that, and the language is unified to describe similar phenomena in different fields, blah blah blah}
+
+\todo[inline]{Talk about functional programming}
+\todo[inline]{Talk about how Markov categories are cats with markov kernels}
+
 \subsection{Functors}
 \subsubsection{Example Functors}
 \subsection{Monoidal Functors}
