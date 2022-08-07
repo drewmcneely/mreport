@@ -1,12 +1,12 @@
 \chapter{Introduction}
 
 The goal set forth by this thesis seems ambitious: to introduce a completely new language of uncertainty and information that abstracts away measure theory, probability, etc. and is better primed for computation in estimation and stochastic control algorithms.
-Luckily, much of this language was already developed by much smarter people than the author. This thesis simply presents the language to a certain audience in a slightly more approachable manner, and frames it in the context of engineering problems.
+Luckily, much of this language was already developed by much smarter people than the author (** avoid this type of language in your thesis (be a bit more formal **). This thesis simply presents (**highlight your work strengths and show some confidence instead of setting the bar regarding the scope of this work too low **) the language to a certain audience in a slightly more approachable manner, and frames it in the context of engineering problems.
 
-Here, we also explicitly formulate certain problems such as estimation filters and stochastic control in this language.
+Here, we also explicitly formulate certain problems such as estimation filters and stochastic control in this language. (** be precise about which control / estimation problems will be discussed **) 
 
 This report is more philosophical in nature, and errs on the side of arguing for a change in pedagogy.
-This report is definitely more ``big picture'', and does not dive into much of the finer nuances of control and estimation. (** E.B. no need to be so apologetic. Say what you want to say but do not ``encourage'' the reader to view this work as philosophical rather than technical **.\todo{write this better}
+This report is definitely more ``big picture'', and does not dive into much of the finer nuances of control and estimation. (** E.B. no need to be so apologetic. Say what you want to say but do not ``encourage'' the reader to view this work as philosophical rather than technical. Advertise your work. Highlight that this is a novel framework that has never been explored in the relevant literature and argue that can potentially lead to better (in what sense?) solutions**.\todo{write this better}
 
 \todo{expand the introduction.}
 
@@ -40,7 +40,7 @@ It more serves as a grounding point, similar to when learning category theory --
 Before giving a formal definition of categories, we should just mention for the familiarity of the reader that a category is made of arrows called \emph{morphisms} that are useful in describing mappings between spaces. In categorical probability, these morphisms can describe \emph{mappings that behave like Markov transition kernels}.
 
 But what exactly is a transition kernel?
-Intuition would say that it is a mapping between distributions, but there is a bit more nuance than that.
+Intuition would say that it is a mapping between distributions, but there is a bit more nuance than that. ** Add some text to introduce these equations **
 
 \newcommand{\normal}{\mathcal{N}}
 \newcommand{\reals}{\mathds{R}}
@@ -58,7 +58,7 @@ Intuition would say that it is a mapping between distributions, but there is a b
     \end{aligned}
 \end{equation}
 \todo{Talk about how this has randomness pushback}
-\todo[inline]{Talk about how the frequentist view of these kernels sees that w gets sampled in the instant that y gets evaluated, and acts as a modifier to Fx. We want to change this to a Bayesian view, where F evaluates by taking in an x and returning a distribution. A p(y|x) kind of thing. The problem is that bar notation, tilde notation, and distributions in the Bayesian context SUCK. This is where the functors come in.}
+\todo[inline]{Talk about how the frequentist view of these kernels sees that w gets sampled in the instant that y gets evaluated, and acts as a modifier to Fx. We want to change this to a Bayesian view, where F evaluates by taking in an x and returning a distribution. A p(y|x) kind of thing. The problem is that bar notation, tilde notation, and distributions in the Bayesian context SUCK (** this is your personal view point; be more ``diplomatic''; explain why is that **). This is where the functors come in.}
 
 \todo{List a bunch of variations on kernels, and discuss them.}
 
@@ -68,7 +68,7 @@ One minor change to our language that can have significant impact is in the reca
 The trouble with random variables:
 Random variables suck. Here's why...
 
-Random variables are often pitched to the student as variables that take on values (ie.\ real numbers) in a random fashion.
+Random variables are often pitched to the student (** why are you referring to ``students''? **) as variables that take on values (ie.\ real numbers) in a random fashion.
 There is a frequentist sort of nature to this description, as if a random variable is a number that changes its value every time you look at it.
 
 There is an alternative viewpoint: what is often called the Bayesian view of probability.
@@ -200,6 +200,8 @@ f = (\counit_X \otimes f) \circ (\comul_X \otimes \id_A)
 \label{eq:conditional-parallel-compositions}
 f = (\id_x \otimes f_x) \circ \left[\left(\comul_x \circ (\id_x\otimes \counit_Y) \circ f\right) \otimes \id_A\right] \circ \comul_A
 \end{equation}
+
+** Explain notation. Every operator you are using in these equations should be explained and formally introduced. **
 
 \section{Bar Notation}
 \subsection{Explanation of Bar Notation}
