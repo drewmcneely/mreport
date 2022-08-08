@@ -1,24 +1,26 @@
+\newcommand{\normal}{\mathcal{N}}
 \chapter{Introduction}
 
 The goal set forth by this thesis seems ambitious: to introduce a completely new language of uncertainty and information that abstracts away measure theory, probability, etc. and is better primed for computation in estimation and stochastic control algorithms.
-Luckily, much of this language was already developed by much smarter people than the author (** avoid this type of language in your thesis (be a bit more formal **). This thesis simply presents (**highlight your work strengths and show some confidence instead of setting the bar regarding the scope of this work too low **) the language to a certain audience in a slightly more approachable manner, and frames it in the context of engineering problems.
+Research into this language is well underway in the mathematical community -- this thesis presents it in the context of stochastic dynamical systems, and discusses a methodology for formulating new stochastic estimation and control problems to be solved.
 
-Here, we also explicitly formulate certain problems such as estimation filters and stochastic control in this language. (** be precise about which control / estimation problems will be discussed **) 
+Much discussion in this thesis will be grounded in the classical Kalman filter, as it is a common estimator with which readers will more likely be familiar, and it serves as a good basic starting point for this methodology.
+Indeed, the author did in fact get inspiration to study this topic after noticing a connection between propagation of uncertainty in the Kalman filter and the monadic bind operator in functional programming languages. This will be discussed later. While it may seem like we are ``reinventing the wheel'' in that this paper presents what seems to amount to just a new way to program Kalman filters, it must be stressed that the approach presented is hypothesized by the author to generalize to brand new estimators yet to be developed and offers a systematic way to derive them.
 
-This report is more philosophical in nature, and errs on the side of arguing for a change in pedagogy.
-This report is definitely more ``big picture'', and does not dive into much of the finer nuances of control and estimation. (** E.B. no need to be so apologetic. Say what you want to say but do not ``encourage'' the reader to view this work as philosophical rather than technical. Advertise your work. Highlight that this is a novel framework that has never been explored in the relevant literature and argue that can potentially lead to better (in what sense?) solutions**.\todo{write this better}
+This approach to estimator derivation is more than just systematic; there is an aspect which is automatic, in that the user only derives simple elemental building blocks for a representation of uncertainty that they come up with, and more complicated algorithms automatically plumb these blocks together. In a way, this thesis shows that parts of a classical Kalman filter can be automatically derived by a computer.
 
 \todo{expand the introduction.}
 
-\chapter{Motivation}
-
-Deriving new estimation algorithms is hard. ** E.B. Why is hard? Explain to me the key challenges** 
-This methodology (** which methodology? **) distills the complex bits into elemental building blocks.
+\section{Motivation}
 
 \todo[inline]{Make a list with a breakdown of the Markov category axiom methods}
 
-\section{Assumptions Made in the Kalman Filter}
-** Do you want to devote a whole section on the assumptions of KF or present it quickly (in  a way that will facilitate the subsequent discussion) together with each assumptions? ** 
+\subsection{Assumptions Made in the Kalman Filter}
+
+The Kalman filter is a commonly cited estimation routine for tracking uncertain dynamical systems.
+The system in question is often modeled in discrete time, and carries a state that is unknown. 
+
+\todo[inline]{I am simply too uncertain on how I wnat to write this section. I have written and deleted stuff several times. TODO: find some paper or index cards or something in Belgium and try to organize that way.}
 
 \section{Abstract Programming}
 
@@ -28,7 +30,7 @@ This methodology (** which methodology? **) distills the complex bits into eleme
     \label{fig:algorithm-inheritance}
 \end{figure}
 
-\chapter{Looking at Markov Transition Kernels}
+\section{Looking at Markov Transition Kernels}
 
 There is often some conflation between conditionals and transition kernels.
 In a way, they are often considered to be developments from the basics of probability.
@@ -42,7 +44,6 @@ Before giving a formal definition of categories, we should just mention for the 
 But what exactly is a transition kernel?
 Intuition would say that it is a mapping between distributions, but there is a bit more nuance than that. ** Add some text to introduce these equations **
 
-\newcommand{\normal}{\mathcal{N}}
 \newcommand{\reals}{\mathds{R}}
 \begin{equation}
 \label{traditional-gaussian-model}
@@ -64,7 +65,7 @@ Intuition would say that it is a mapping between distributions, but there is a b
 
 One minor change to our language that can have significant impact is in the recasting of equations into functions\todo{expand on this}.
 
-\section{Recasting the Datatypes}
+\subsection{Recasting the Datatypes}
 The trouble with random variables:
 Random variables suck. Here's why...
 
@@ -115,13 +116,13 @@ Using a similar approach to above, let's recast the signature into the new datat
 
 \todo[inline]{Talk about how the kernel $\kappa$ has a signature $\mathcal{B}\times X \rightarrow [0,1]$, but we can equivalently formulate it as $\kappa : X \rightarrow \mathcal{P} Y$}
 
-\chapter{Functional Programming}
-\section{Higher Order Functions}
+\section{Functional Programming}
+\subsection{Higher Order Functions}
 
 A powerful feature of the functional programming paradigm and the first class citizenship of functions is that 
 
-\section{Higher Order Types and Type Functions}
-\section{Typeclasses and Abstract Base Classes}
+\subsection{Higher Order Types and Type Functions}
+\subsection{Typeclasses and Abstract Base Classes}
 
 \chapter{Background}
 \section{Category Theory}
