@@ -1,0 +1,190 @@
+\chapter{Introduction}
+
+The goal set forth by this thesis seems ambitious: to introduce a completely new language of uncertainty and information that abstracts away measure theory, probability, etc. and is better primed for computation in estimation and stochastic control algorithms.
+Research into this language is well underway in the mathematical community -- this thesis presents it in the context of stochastic dynamical systems, and discusses a methodology for formulating new stochastic estimation and control problems to be solved.
+
+Much discussion in this thesis will be grounded in the classical Kalman filter, as it is a common estimator with which readers will more likely be familiar, and it serves as a good basic starting point for this methodology.
+Indeed, the author did in fact get inspiration to study this topic after noticing a connection between propagation of uncertainty in the Kalman filter and the monadic bind operator in functional programming languages. This will be discussed later. While it may seem like we are ``reinventing the wheel'' in that this paper presents what seems to amount to just a new way to program Kalman filters, it must be stressed that the approach presented is hypothesized by the author to generalize to brand new estimators yet to be developed and offers a systematic way to derive them.
+
+This approach to estimator derivation is more than just systematic; there is an aspect which is automatic, in that the user only derives simple elemental building blocks for a representation of uncertainty that they come up with, and more complicated algorithms automatically plumb these blocks together. In a way, this thesis shows that parts of a classical Kalman filter can be automatically derived by a computer.
+
+\todo[inline]{Expand on this thought: at the heart of computer science and engineering fields are two concepts, fundamentally intertwined: abstraction and automation. When we have a repetitive task, a general approach is to find patterns in the repetition, characterize them, and use them to determine a more abstract descriptive language. In this process, the lower level gets an implementation that conforms to an interface to talk with the higher level. This abstraction process can be repeated many times, forming an abstraction ladder, where the highest rung is very general, descriptive, and powerful, and it communicates with the level below it, which propagates all the way to the bottom closest-to-the-metal rung. In this thesis, we use an upcoming mathematical language in a beginning attempt to automate and abstract away the details of deriving estimation schemes for stochastic dynamical systems.}
+
+\section{The Kalman Filter}
+
+\subsection{Definition}
+
+The Kalman filter is a commonly cited estimation routine for tracking uncertain dynamical systems.
+The system in question is often modeled in discrete time, and carries a state that is unknown. 
+
+A discrete dynamical system can be abstracted as a point $x\in X$ that evolves in a sequence $\{x_k\}_{k\in \naturals}$.
+We call $x_k$ the state at time $k$, which lives in the state space $X$. For the Kalman filter, $X$ is a finite dimensional real-valued vector space $\reals^n$.
+Measurements $z\in Z$ are then taken at each time step, where $Z$ is the measurement space. For the Kalman filter, $Z$ is usually taken to be the vector space $\reals^m$. For generality, we will still just refer to the spaces as $X$ and $Z$ respectively, as later on we will discuss generalizing these beyond vector spaces.
+
+The mappings are linear with additive Gaussian noise. The dynamics and measurement models respectively are given by
+\begin{equation}
+	\label{kalman-filter-models}
+	\begin{aligned}
+		x &= Fx_- + w,\ w\sim\gaussian(0,Q)\\
+		y &= Hx + v,\ v\sim\gaussian(0,R)
+	\end{aligned}
+\end{equation}
+where $F:X\rightarrow X$, $H:X\rightarrow Z$, $Q\in \symmetric^X_+$, and $R\in\symmetric^Z_+$.
+For simplicity, we omit the explicit references to time dependency and drop the subscripts for the time sequence.
+Here we really only consider a single time step $k$ within the algorithm, as the algorithm is recursively looped and each step is implemented in the same way. If a variable has no subscript, it can be assumed that it draws from time step $k$. If it has the subscript ``$-$'', then it comes from the $k-1$ time step.
+
+%We switched the notion from additive noise to a formal sum. This is more a change in mindset and doesn't affect the outcome. In traditional texts, the equation $y = Hx + v,\ v\sim \gaussian(0,R)$ implies that the measurement model is an affine mapping, with an additive vector $v$ that gets drawn from a Gaussian distribution. Here, however, we add the distribution directly in a \emph{formal} sum in what we call a decorated linar map\cite{extended-gaussian}. The plus sign does not indicate that the distribution is literally added to the vector, which would be impossible, but simply that there is uncertainty attached to the model. 
+
+Remark: $Q$ and $R$ are not strictly positive-definite, but they are relaxed to being positive semi-definite. This allows for the case where there actually is certainty, be it complete certainty or certainty within a subspace. This can also be extended to uninformative priors, again as in \cite{extended-gaussian}.
+
+Our posterior knowledge of the state is characterized by a Gaussian uncertainty.
+Thus at the current time step, the posterior knowledge from the prievious timestep is given as $\gaussian(\hat{x}_-, \hat{P}_-)$.
+This is pushed through the dynamic model in Equation \ref{kalman-filter-model} to get the prior belief $\gaussian(\bar{x}, \bar{P})$ of the state at the current time step, with
+\begin{align}
+	\bar{x} = F\hat{x}_-\\
+	\bar{P} = F\hat{P}_- F^T + Q
+\end{align}
+Further, this then gets propagated to our belief on where the measurement will fall, $\gaussian(\bar{z}, S)$ with
+\begin{align}
+	\bar{z} = H\bar{x}\\
+	S = H\bar{P} H^T + R
+\end{align}
+our belief on where the measurement will fall, $\gaussian(\bar{z}, S)$ with
+
+This next part we will present in a way that's slightly rearranged from common texts, but which sets the stage or further generalizing the filter.
+In particular, typically a measurement error is defined as $\tilde{y} = z - \bar{z}$, but we define the following:
+
+\begin{equation}
+	K = \bar{P}H^T S^{-1}
+\end{equation}
+
+\begin{equation}
+	\tilde{x} = \bar{x} - K\bar{z}
+\end{equation}
+
+We then get our posterior estimate
+
+\begin{align}
+	\hat{x} = Kz + \tilde{x} \\
+	\hat{P} = (I-KH)\bar{P}
+\end{align}
+
+
+\subsection{Recasting the Datatypes}
+
+Random variables are often described as variables that take on values (ie.\ real numbers) in a random fashion.
+There is a frequentist sort of nature to this description, as if a random variable is a number that changes its value every time you look at it.
+
+There is an alternative viewpoint: what is often called the Bayesian view of probability.
+It states that probability (of an event) is simply a measure of our belief in a state, or more specifically the amount we believe that a state will fall into that event.
+We wish to take this viewpoint and run with it, generalizing into many different ways of characterizing our belief or information on the state of a system.
+
+Given a real finite dimensional vector space $X$, we will define for now\footnote{This and the treatment in \ref{sec:kernel-signature} looks like we're setting up $\gaussian$ as a functor for formulating $\gausscat$ as a Kleisli category. It's well conjectured that $\gausscat$ is not a Kleisli category. For demonstration purposes however, I'm setting it up like one here to introduce readers to the concept using familiar constructions. We will discuss decorated maps a-l\`a \cite{stein2022extended} later.} the collection of Gaussian distributions on $X$.
+For the practical purposes of making datatypes, it's sufficient to define it through its parameterization of a mean and covariance as opposed to defining it as the actual collection of Gaussian probability measures.
+Thus, we define $\gaussian$ as a type-level\footnote{Defined later in our discussion of functional programming} mapping on vector spaces:
+
+The parameterization of our knowledge of the state lives in a separate space from the state itself.
+While the system itself has a state $x\in X$, our knowledge of it, characterized by a Gaussian distribution, has a parameterization $(x,P)\in X\times \symmetric^X_+$.
+We notate this space, the space of 
+
+
+\begin{equation}
+    \gaussian : X \mapsto \{(x,P) : x\in X, P \in \symmetric^X_+\}
+\end{equation}
+
+\subsection{The kernels}
+
+\subsection{Assumptions}
+
+Several assumptions are made in the structure of the Kalman filter. In the quest for generalization and in search of a \emph{prejudice free} filter \cite{some-moriba-paper}, we enumerate assumptions and generalizations that this framework can potentially strip away.
+
+\paragraph{State Space}
+
+Systems modeled for the Kalman filter have states that live in a finite dimensional real-valued vector space. Many interesting systems, however, live in much more general spaces that can be hard to characterize in a computer program. \todo[inline]{Put this somewhere: We believe that the framework presented could potentially offer a systematic way to represent state spaces. Talk about procedurally generated algorithms somewhere.} Many systems would be more accurately represented as a Hilbert or Banach space, Riemannian manifold, Lie group, finite space, topological space, general measure space, or something else. In taking a categorical approach to dynamical systems, we generalize $X$ to be \emph{any} kind of state space.
+
+\paragraph{Uncertainty Representation}
+
+Uncertainty in the state is taken to be a multivariate Gaussian probability distribution. Beyond the fact that generalizations in the type of state space warrant alternate considerations for probability, we wish to generalize notions of uncertainty beyond probability density functions and even beyond probability itself. Common practices involve treating uncertainty as being a distribution with a PDF, but in a measure theoretic context there exist probability spaces whose probability measure is not differentiable or ``nice looking'' in a smooth or continuous sense. Further, there are representations that go beyond probability even: we could wish to represent our knowledge of system state with \emph{possibility}, where at a given time we know the system lies in a certain region, but we know nothing of where in the region it lies. There are more exotic representations of uncertainty, such as outer probability measures \cite{houssineau} or higher order probability \cite{some moriba paper} that could potentially fit into this framework. In total, we wish to abstract $\gaussian X$ into $\probfunc X$, which represents a generic class of information distributions on $X$. For instance, we could have $\probfunc(X) = 2^X$ the power set of $X$. An element $x_0\in 2^X$ is merely a subset of $X$, and thus would be a fine representation for an initial state possibility distribution for the system. Another well known example is the Giry monad $\giry$ on a measurable space $X$, which is the class of all probability measures on $X$ endowed with its own induced sigma algebra.
+
+Remark: there is some practicality to note. Ultimately, $\probfunc$ will be constructed as a datatype mapping, or $\probfunc(X)$ will be explicitly constructed as a datatype itself. Not all 
+
+\paragraph{Kernels}
+
+\section{Abstract Programming}
+
+\begin{figure}[htb]
+    \includegraphics[width=0.5\textwidth]{algorithm-inheritance}
+	\caption{}
+    \label{fig:algorithm-inheritance}
+\end{figure}
+
+\section{Looking at Markov Transition Kernels}
+
+There is often some conflation between conditionals and transition kernels.
+In a way, they are often considered to be developments from the basics of probability.
+This stems from the fact that in traditional probability theory, the probability distribution or probability measure is the fundamental notion from which all other definitions and developments are derived.
+Similar to how in categorical thinking, where the perspective is switched from sets being fundamental to functions being fundamental, we want to change lenses away from distributions and onto kernels as being the most elemental construction from which distributions, statistics, and algorithms are derived. 
+Of course, it significantly helps us in our understanding if we already have some insight into a traditional measure-theoretic way of thinking about probability, but this is not totally necessary.
+It more serves as a grounding point, similar to when learning category theory -- it helps greatly to already be familiar with sets+functions, vector spaces+linear maps, topoligical spaces+continuous maps, groups+group homomorphisms, and so on so that we have a \emph{context} for where categories are really useful as a language to describe stuff instead of only this abstract notion of arrows and objects and categories of categories.
+
+Before giving a formal definition of categories, we should just mention for the familiarity of the reader that a category is made of arrows called \emph{morphisms} that are useful in describing mappings between spaces. In categorical probability, these morphisms can describe \emph{mappings that behave like Markov transition kernels}.
+
+But what exactly is a transition kernel?
+Intuition would say that it is a mapping between distributions, but there is a bit more nuance than that. ** Add some text to introduce these equations **
+
+\todo[inline]{List all the different types of transition kernels you've seen and talk about their differences and similarities. The goal here is to show how they can be unified into the categorical framework.}
+
+\begin{equation}
+\label{traditional-gaussian-model}
+\begin{gathered}
+    y = Fx + w \\
+    w \sim \gaussian(\bar{w}, R)
+\end{gathered}
+\end{equation}
+
+\begin{equation}
+    \begin{aligned}
+	y = f(x,w)
+    \end{aligned}
+\end{equation}
+\todo{Talk about how this has randomness pushback}
+\todo[inline]{Talk about how the frequentist view of these kernels sees that w gets sampled in the instant that y gets evaluated, and acts as a modifier to Fx. We want to change this to a Bayesian view, where F evaluates by taking in an x and returning a distribution. A p(y|x) kind of thing. The problem is that bar notation, tilde notation, and distributions in the Bayesian context SUCK (** this is your personal view point; be more ``diplomatic''; explain why is that **). This is where the functors come in.}
+
+One minor change to our language that can have significant impact is in the recasting of equations into functions\todo{expand on this}.
+
+\section{The Signature of Kernels}
+\label{sec:kernel-signature}
+
+One confusing aspect of Markov transition kernels is their signature. 
+Standard texts describe the a kernel as the following:
+
+\todo{markov kernel definition}
+
+The important bit is in the partial application: parameterizing $\kappa$ with $x$, the function $\kappa(\cdot, x)$ is a probability measure from $\mathcal{B} \rightarrow [0,1]$ and parameterizing with $B\in \mathcal{B}$, the function $\kappa(B,\cdot)$ is a \emph{mapping whose domain is $X$}.
+This is important: $\kappa$ does not input values of distributions, but rather values of state.
+This is evident in the confusing bar notation: $p(y|x)$ reads as ``$p$ of $y$ given $x$".
+In other words, the transition kernel gives a distribution on $Y$ given a fixed value of $x\in X$.
+
+Using Currying ie.\ partial application\todo{expand on this?}, we can rewrite this signature. 
+Since $\giry Y$ is defined to be the collection of distributions on $Y$, then there is an equivalence between $\kappa : \mathcal{B} \times X \rightarrow [0,1]$ and $\kappa : X \rightarrow \giry Y$.
+
+We can give the same treatment to Gaussian models of the form in Equation \ref{eq:traditional-gaussian-model} in Kalman filters, which are also just Markov kernels. The maps just happen to be linear and the distributions gaussian.
+While we treat $x$ as a random variable in $y = Fx + w$, the $F$ does not take in random variables.
+It takes plain old vectors.
+We had to do the work of figuring out how to propagate covariance through $F$.
+Further, \ref{eq:traditional-gaussian-model} injects its own distribution into the codomain through $w$.
+
+\todo[inline]{Say something about frequentist statistics}
+
+Using a similar approach to above, let's recast the signature into the new datatype.
+
+\todo[inline]{Talk about how the kernel $\kappa$ has a signature $\mathcal{B}\times X \rightarrow [0,1]$, but we can equivalently formulate it as $\kappa : X \rightarrow \mathcal{P} Y$}
+
+\section{Functional Programming}
+\subsection{Higher Order Functions}
+
+A powerful feature of the functional programming paradigm and the first class citizenship of functions is that 
+
+\subsection{Higher Order Types and Type Functions}
+\subsection{Typeclasses and Abstract Base Classes}
+
