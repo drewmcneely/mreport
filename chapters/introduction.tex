@@ -8,15 +8,11 @@ Indeed, the author did in fact get inspiration to study this topic after noticin
 
 This approach to estimator derivation is more than just systematic; there is an aspect which is automatic, in that the user only derives simple elemental building blocks for a representation of uncertainty that they come up with, and more complicated algorithms automatically plumb these blocks together. In a way, this thesis shows that parts of a classical Kalman filter can be automatically derived by a computer.
 
-\todo{expand the introduction.}
+\todo[inline]{Expand on this thought: at the heart of computer science and engineering fields are two concepts, fundamentally intertwined: abstraction and automation. When we have a repetitive task, a general approach is to find patterns in the repetition, characterize them, and use them to determine a more abstract descriptive language. In this process, the lower level gets an implementation that conforms to an interface to talk with the higher level. This abstraction process can be repeated many times, forming an abstraction ladder, where the highest rung is very general, descriptive, and powerful, and it communicates with the level below it, which propagates all the way to the bottom closest-to-the-metal rung. In this thesis, we use an upcoming mathematical language in a beginning attempt to automate and abstract away the details of deriving estimation schemes for stochastic dynamical systems.}
 
-\section{Motivation}
+\section{The Kalman Filter}
 
-\todo[inline]{Make a list with a breakdown of the Markov category axiom methods}
-
-\subsection{Assumptions Made in the Kalman Filter}
-
-\subsubsection{Definition of a Kalman Filter}
+\subsection{Definition}
 
 The Kalman filter is a commonly cited estimation routine for tracking uncertain dynamical systems.
 The system in question is often modeled in discrete time, and carries a state that is unknown. 
@@ -29,17 +25,17 @@ The mappings are linear with additive Gaussian noise. The dynamics and measureme
 \begin{equation}
 	\label{kalman-filter-models}
 	\begin{aligned}
-		x &= Fx_- + \gaussian(0,Q)\\
-		y &= Hx + \gaussian(0,R)
+		x &= Fx_- + w,\ w\sim\gaussian(0,Q)\\
+		y &= Hx + v,\ v\sim\gaussian(0,R)
 	\end{aligned}
 \end{equation}
 where $F:X\rightarrow X$, $H:X\rightarrow Z$, $Q\in \symmetric^X_+$, and $R\in\symmetric^Z_+$.
 For simplicity, we omit the explicit references to time dependency and drop the subscripts for the time sequence.
 Here we really only consider a single time step $k$ within the algorithm, as the algorithm is recursively looped and each step is implemented in the same way. If a variable has no subscript, it can be assumed that it draws from time step $k$. If it has the subscript ``$-$'', then it comes from the $k-1$ time step.
 
-We switched the notion from additive noise to a formal sum. This is more a change in mindset and doesn't affect the outcome. In traditional texts, the equation $y = Hx + v,\ v\sim \gaussian(0,R)$ implies that the measurement model is an affine mapping, with an additive vector $v$ that gets drawn from a Gaussian distribution. Here, however, we add the distribution directly in a \emph{formal} sum in what we call a decorated linar map\cite{extended-gaussian}. The plus sign does not indicate that the distribution is literally added to the vector, which would be impossible, but simply that there is uncertainty attached to the model. 
+%We switched the notion from additive noise to a formal sum. This is more a change in mindset and doesn't affect the outcome. In traditional texts, the equation $y = Hx + v,\ v\sim \gaussian(0,R)$ implies that the measurement model is an affine mapping, with an additive vector $v$ that gets drawn from a Gaussian distribution. Here, however, we add the distribution directly in a \emph{formal} sum in what we call a decorated linar map\cite{extended-gaussian}. The plus sign does not indicate that the distribution is literally added to the vector, which would be impossible, but simply that there is uncertainty attached to the model. 
 
-The other thing to note is that $Q$ and $R$ are not strictly positive-definite, but they are relaxed to being positive semi-definite. This allows for the case where there actually is certainty, be it complete certainty or certainty within a subspace. This can also be extended to uninformative priors, again as in \cite{extended-gaussian}.
+Remark: $Q$ and $R$ are not strictly positive-definite, but they are relaxed to being positive semi-definite. This allows for the case where there actually is certainty, be it complete certainty or certainty within a subspace. This can also be extended to uninformative priors, again as in \cite{extended-gaussian}.
 
 Our posterior knowledge of the state is characterized by a Gaussian uncertainty.
 Thus at the current time step, the posterior knowledge from the prievious timestep is given as $\gaussian(\hat{x}_-, \hat{P}_-)$.
@@ -74,11 +70,9 @@ We then get our posterior estimate
 \end{align}
 
 
-\subsubsection{Recasting the Datatypes}
-The trouble with random variables:
-Random variables suck. Here's why...
+\subsection{Recasting the Datatypes}
 
-Random variables are often pitched to the student (** why are you referring to ``students''? **) as variables that take on values (ie.\ real numbers) in a random fashion.
+Random variables are often described as variables that take on values (ie.\ real numbers) in a random fashion.
 There is a frequentist sort of nature to this description, as if a random variable is a number that changes its value every time you look at it.
 
 There is an alternative viewpoint: what is often called the Bayesian view of probability.
@@ -98,6 +92,23 @@ We notate this space, the space of
     \gaussian : X \mapsto \{(x,P) : x\in X, P \in \symmetric^X_+\}
 \end{equation}
 
+\subsection{The kernels}
+
+\subsection{Assumptions}
+
+Several assumptions are made in the structure of the Kalman filter. In the quest for generalization and in search of a \emph{prejudice free} filter \cite{some-moriba-paper}, we enumerate assumptions and generalizations that this framework can potentially strip away.
+
+\paragraph{State Space}
+
+Systems modeled for the Kalman filter have states that live in a finite dimensional real-valued vector space. Many interesting systems, however, live in much more general spaces that can be hard to characterize in a computer program. \todo[inline]{Put this somewhere: We believe that the framework presented could potentially offer a systematic way to represent state spaces. Talk about procedurally generated algorithms somewhere.} Many systems would be more accurately represented as a Hilbert or Banach space, Riemannian manifold, Lie group, finite space, topological space, general measure space, or something else. In taking a categorical approach to dynamical systems, we generalize $X$ to be \emph{any} kind of state space.
+
+\paragraph{Uncertainty Representation}
+
+Uncertainty in the state is taken to be a multivariate Gaussian probability distribution. Beyond the fact that generalizations in the type of state space warrant alternate considerations for probability, we wish to generalize notions of uncertainty beyond probability density functions and even beyond probability itself. Common practices involve treating uncertainty as being a distribution with a PDF, but in a measure theoretic context there exist probability spaces whose probability measure is not differentiable or ``nice looking'' in a smooth or continuous sense. Further, there are representations that go beyond probability even: we could wish to represent our knowledge of system state with \emph{possibility}, where at a given time we know the system lies in a certain region, but we know nothing of where in the region it lies. There are more exotic representations of uncertainty, such as outer probability measures \cite{houssineau} or higher order probability \cite{some moriba paper} that could potentially fit into this framework. In total, we wish to abstract $\gaussian X$ into $\probfunc X$, which represents a generic class of information distributions on $X$. For instance, we could have $\probfunc(X) = 2^X$ the power set of $X$. An element $x_0\in 2^X$ is merely a subset of $X$, and thus would be a fine representation for an initial state possibility distribution for the system. Another well known example is the Giry monad $\giry$ on a measurable space $X$, which is the class of all probability measures on $X$ endowed with its own induced sigma algebra.
+
+Remark: there is some practicality to note. Ultimately, $\probfunc$ will be constructed as a datatype mapping, or $\probfunc(X)$ will be explicitly constructed as a datatype itself. Not all 
+
+\paragraph{Kernels}
 
 \section{Abstract Programming}
 
