@@ -94,6 +94,8 @@ We notate this space, the space of
 
 \subsection{The kernels}
 
+\todo[inline]{Rewrite the Kalman filter in terms of the four mappings that you have on that piece of paper you lost}
+
 \subsection{Assumptions}
 
 Several assumptions are made in the structure of the Kalman filter. In the quest for generalization and in search of a \emph{prejudice free} filter \cite{some-moriba-paper}, we enumerate assumptions and generalizations that this framework can potentially strip away.
@@ -106,9 +108,11 @@ Systems modeled for the Kalman filter have states that live in a finite dimensio
 
 Uncertainty in the state is taken to be a multivariate Gaussian probability distribution. Beyond the fact that generalizations in the type of state space warrant alternate considerations for probability, we wish to generalize notions of uncertainty beyond probability density functions and even beyond probability itself. Common practices involve treating uncertainty as being a distribution with a PDF, but in a measure theoretic context there exist probability spaces whose probability measure is not differentiable or ``nice looking'' in a smooth or continuous sense. Further, there are representations that go beyond probability even: we could wish to represent our knowledge of system state with \emph{possibility}, where at a given time we know the system lies in a certain region, but we know nothing of where in the region it lies. There are more exotic representations of uncertainty, such as outer probability measures \cite{houssineau} or higher order probability \cite{some moriba paper} that could potentially fit into this framework. In total, we wish to abstract $\gaussian X$ into $\probfunc X$, which represents a generic class of information distributions on $X$. For instance, we could have $\probfunc(X) = 2^X$ the power set of $X$. An element $x_0\in 2^X$ is merely a subset of $X$, and thus would be a fine representation for an initial state possibility distribution for the system. Another well known example is the Giry monad $\giry$ on a measurable space $X$, which is the class of all probability measures on $X$ endowed with its own induced sigma algebra.
 
-Remark: there is some practicality to note. Ultimately, $\probfunc$ will be constructed as a datatype mapping, or $\probfunc(X)$ will be explicitly constructed as a datatype itself. Not all 
+Remark: there is some practicality to note. Ultimately, $\probfunc$ will be constructed as a datatype mapping, or $\probfunc(X)$ will be explicitly constructed as a datatype itself. Not all information representations, for instance general probability measures, can be practically constructed as a datatype.
 
 \paragraph{Kernels}
+
+\todo[inline]{This will be about the assumptions made in the kernels. They're decorated linear maps, or can be thought of as linear maps with additive gaussean noise. We want to generalize to any generic mapping between classes of knowledge representaitons.}
 
 \section{Abstract Programming}
 
