@@ -75,26 +75,38 @@ We then get our posterior estimate
 Random variables are often described as variables that take on values (ie.\ real numbers) in a random fashion.
 There is a frequentist sort of nature to this description, as if a random variable is a number that changes its value every time you look at it.
 
+\todo[inline]{Discuss interpretations and formalizations of random variables. In particular, the formalization that a random variable is a \emph{function} from a probability space taking on values in a state space is just so clunky to work with. It opens up ambiguities, for instance in the ASE department's discussion of MMSE, that are so confusing.}
+
 There is an alternative viewpoint: what is often called the Bayesian view of probability.
 It states that probability (of an event) is simply a measure of our belief in a state, or more specifically the amount we believe that a state will fall into that event.
 We wish to take this viewpoint and run with it, generalizing into many different ways of characterizing our belief or information on the state of a system.
 
-Given a real finite dimensional vector space $X$, we will define for now\footnote{This and the treatment in \ref{sec:kernel-signature} looks like we're setting up $\gaussian$ as a functor for formulating $\gausscat$ as a Kleisli category. It's well conjectured that $\gausscat$ is not a Kleisli category. For demonstration purposes however, I'm setting it up like one here to introduce readers to the concept using familiar constructions. We will discuss decorated maps a-l\`a \cite{stein2022extended} later.} the collection of Gaussian distributions on $X$.
-For the practical purposes of making datatypes, it's sufficient to define it through its parameterization of a mean and covariance as opposed to defining it as the actual collection of Gaussian probability measures.
-Thus, we define $\gaussian$ as a type-level\footnote{Defined later in our discussion of functional programming} mapping on vector spaces:
-
 The parameterization of our knowledge of the state lives in a separate space from the state itself.
 While the system itself has a state $x\in X$, our knowledge of it, characterized by a Gaussian distribution, has a parameterization $(x,P)\in X\times \symmetric^X_+$.
-We notate this space, the space of 
+To simplify our language, we wish to define a space in which each element is a distribution. For the Gaussian case, we shall define $\gaussian(X)$ to be the space of Gaussian distributions on $X$, where $X$ is some finite dimensional real valued vector space $X=\reals^n$. This changes our perspective and modifies our notation: previously, we would view the notation $x\in X,\ x\sim \gaussian(\hat{x}, P)$ to mean ``$x$ is a system state living in the state space $X$, but we don't know where it is. Our knowledge of where it might be is given by the distribution $\gaussian(\hat{x}, P)$, and observing it directly would be akin to sampling the probability distribution''. Under this new construction, we could change the notation to $x\in \gaussian X,\ x = \gaussian(\hat{x}, P)$.
+The change in notation is subtle, but the difference in interpretation is significant. This new notation would be interepreted as ``$x$ \emph{is} our knowledge of where the system state may lie, and it lives in the collection of Gaussian distributions on $X$. $x$ \emph{is equal to} such and such distribution.''\todo{Write this better}.
 
+For practicality, we parameterize. A class of anything\todo{write this better} is isomorphic to its parameterization, and in the case of Gaussians each distribution is fully parameterized by its mean and covariance. Thus, we have $\gaussian X \cong X\times \symmetric^X_+$, and for purposes of discussion they can be considered equivalent.
+
+Note that this forms a type level mapping $\gaussian : \FinVect \rightarrow \gausscat$ with
 
 \begin{equation}
     \gaussian : X \mapsto \{(x,P) : x\in X, P \in \symmetric^X_+\}
 \end{equation}
 
+This is a functor, meaning it also maps mappings.
+
 \subsection{The kernels}
 
-\todo[inline]{Rewrite the Kalman filter in terms of the four mappings that you have on that piece of paper you lost}
+Given that we have gotten rid of sampling from distributions, we must change the way we notate the models in \ref{kalman-models}. We also wish to change our perspective, similar to section \ref{datatypes}.
+
+Consider a generic mapping of the same type in Equations \ref{kalman-models}.
+
+\begin{gather}
+	y = Hx + v
+\end{gather}
+
+Were $x\in X$, $H:X\rightarrow Y$, 
 
 \subsection{Assumptions}
 
