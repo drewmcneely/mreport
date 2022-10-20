@@ -66,14 +66,14 @@ Given $f:A\rightarrow X\otimes Y$, find $f_X : X\otimes A \rightarrow Y$ such th
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=0.5\textwidth]{conditional}
+	\tikzfig{conditional}
 	\caption{The string diagram equation for the definition of conditioning.}
-	\label{fig:conditional}
+	\label{tikz:conditional}
 \end{figure}
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=0.5\textwidth]{conditional-compositions}
+	\includegraphics[width=0.8\textwidth]{conditional-compositions}
 	\caption{The conditional equation is read like so. This corresponds to Equation \ref{eq:conditional-compositions}.}
 	\label{fig:conditional-compositions}
 \end{figure}
@@ -87,7 +87,7 @@ Given $f:A\rightarrow X\otimes Y$, find $f_X : X\otimes A \rightarrow Y$ such th
 
 \begin{equation}
 \label{eq:conditional-compositions}
-f = (\counit_X \otimes f) \circ (\comul_X \otimes \id_A)
+f = (\id_X \otimes f_X) \circ (\comul_X \otimes \id_A)
 \circ (\id_X \otimes \counit_Y \otimes \id_A) \circ (f \otimes \id_A) \circ \comul_A
 \end{equation}
 
