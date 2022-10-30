@@ -158,7 +158,9 @@ Given this treatment, the Kalman filter can be rewritten yet again: given the fo
     \xmapsto[\gaussian(0,R)]{H}
     \gaussian(\bar{z}, S)
 \end{equation}
-the Bayesian inversion of $h$ with respect to $f\circ x$ is $h^\dagger$ as given in Equation \ref{kalman-dagger}.
+the Bayesian inversion of $h$ with respect to $f\circ x$ is $h^\dagger$ as given in Equation \ref{kalman-dagger}. Given the kernel $z : ([],[])\xmapsto[\gaussian(z,0)]{[]} \gaussian(z,0)$, we apply it through the Bayesian inversion to get $x = h^\dagger\circ z$.
+
+This begs the question: we have 3 kernels that we combine in some way to get the Bayesian inversion $h^\dagger$. This isn't just blind composition either: we take the prior $\gaussian(\bar{x}, \bar{P})$, and before we send it on its way through $h$, we make a copy of it, and use those results along with the results after mapping through $h$ to generate $h^\dagger$. Is there a systematic way of doing this without deriving the Kalman gain and covariance update by hand? Can we avoid using Gaussian PDFs in this derivation? Can we generalize this process to other types of kernels or distributions? This is the thesis of my thesis.\todo{I wrote this at 12:30 AM, obviously}
 
 \subsection{Assumptions}
 
