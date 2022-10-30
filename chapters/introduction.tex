@@ -133,7 +133,32 @@ Seeing how the means and covariances get mapped through models in Equations \ref
 
 From this, we can immediately rewrite much of the Kalman filter in a more compact form. 
 
-Say that $x_- = (\hat{x}_-, \hat{P}_-)\in \gaussian X$ is given, and we have dynamics model $f = (F,\gaussian(0,Q)):\gaussian X \rightarrow \gaussian X$ and measurement model $h = (H,\gaussian(0,R))$ that map $x$ according to Equation \ref{gaussian-map}. If we pattern match $(\bar{x}, \bar{P}) = f(x_-)$ and $(\bar{z}, S) = h(f(x_-))$, then the Bayesian inversion of $h$ is given by $h^\dagger = (K, \gaussian(\tilde{x}, \hat{P}))$ where $K$, $\tilde{x}$, and $\hat{P}$ are given by Equations \ref{kalman-gain}, \ref{expected-residual}, and \ref{updated-covariance} respectively. This gets applied to a given measurement $z = (z,0)\in \gaussian{Z}$ as $x = h^\dagger(z)$.
+Say that $x_- = (\hat{x}_-, \hat{P}_-)\in \gaussian X$ is given, and we have dynamics model $f = (F,\gaussian(0,Q)):\gaussian X \rightarrow \gaussian X$ and measurement model $h = (H,\gaussian(0,R))$ that map $x$ according to Equation \ref{gaussian-map}. If we pattern match $(\bar{x}, \bar{P}) = f(x_-)$ and $(\bar{z}, S) = h(f(x_-))$, then the Bayesian inversion of $h$ is given by
+\begin{equation}
+    \label{kalman-dagger}
+    h^\dagger = (K, \gaussian(\tilde{x}, \hat{P})) : \gaussian Y\rightarrow \gaussian X
+\end{equation}
+where $K$, $\tilde{x}$, and $\hat{P}$ are given by Equations \ref{kalman-gain}, \ref{expected-residual}, and \ref{updated-covariance} respectively. This gets applied to a given measurement $z = (z,0)\in \gaussian{Z}$ as $x = h^\dagger(z)$.
+
+There are actually two more kernels hidden here, that we will develop now just for completeness. To set the stage, consider a set $X$ and an element $x\in X$. Also consider the singleton set, $\singletonset$, which has just one element that we call ``$\cdot$''. A function $f:\singletonset\rightarrow X$ has only the single element $\cdot$ in its domain, thus its range in $X$ also consists of a single element. This means that the hom set $\Set(\singletonset, X)$ is equivalent to $X$ itself, ie.\ that picking an element $x\in X$ is equivalent to picking a function $x:\singletonset \rightarrow X$. Mapping an element $x\in X$ through a function $f:X\rightarrow Y$ as $y=f(x)$ is then equivalent to composing functions $f\circ x:\singletonset\rightarrow X\rightarrow Y$ as this yields simply another function $f\circ x = y :\singletonset\rightarrow Y$.
+
+We can do the same thing for distributions. The trivial vector space, $\reals^0$, has a single element, $0$. This single element can also be viewed as $[]$, the empty list of length 0. For any $\reals^n$ there is only one function $F:\reals^0\rightarrow \reals^n$ which maps to $0\in\reals^n$ and has an empty matrix representation $[]\in \reals^{n\times 0}$. The space of distributions $\gaussian \reals^0$ has a single distribution $([], [])$ whose mean is an empty $\reals^0$ vector and covariance is an empty PSD matrix $0\in\symmetric^0_+$. Note that although the covariacne is an empty matrix, its scalar value is 0 and is thus PSD. This represents a dirac distribution centered around the degenerate origin. A kernel then is a map $\gaussian \reals^0 \xrightarrow[\gaussian(\hat{x},P)]{[]}\gaussian \reals^n$ that picks a single distribution in $\gaussian\reals^n$ based on the mapping in Equation \ref{gaussian-map}: the mean is $0^{n\times 0}0^0 + \hat{x}$ and the covariance is $0^{n\times 0}0^{0\times 0}(0^{n\times 0})^T + P$. From this point forward in the thesis, we will treat distributions as functions coming out of the unit space of a single degenerate distribution. In practice, depending on the programming language used, it might be easier to pick one representation or another.
+
+Note the similarities but also the distinction between this equivalence and the measure theoretic treatement of random variables. In measure theory, a random variable was thought of as an element $x\in X$ with some mysterious uncertainty to it, but behind the scenes it was actually a mapping from a sample space $x:\Omega \rightarrow X$ that pushed a probability measure through it $P \mapsto x^*(P)$. A deterministic function $f:X\rightarrow Y$ was treated as being applied to $x$ in $y = f(x)$, when in reality behind the scenes it was composed as $y = f\circ x : \Omega \xrightarrow{x} X \xrightarrow{f} Y$. This would simply yield a new random variable $y:\Omega\rightarrow Y$ with its own pushforward. Nondeterministic Markov kernels $p(y|x)$ required more complicated considerations and further definitions such as conditioning. In our treatment, we treat random variables as functions $x:\probfunc \singletonset \rightarrow \probfunc X$, when equivalently it could be an element $x\in\probfunc X$. We can map through \emph{any} non-deterministic kernel $f:\probfunc X \rightarrow \probfunc Y$, either as an element $x\mapsto f(x) = y$ or as a composition $y = f\circ x : \probfunc\singletonset \xrightarrow{x} X \xrightarrow{f} Y$ to yield a new distribution function $y:\probfunc\singletonset \rightarrow \probfunc Y$. Depending on the programming style and language chosen, one characterization or the other may be ideal, but here in this thesis we consider distributions to be functions from the singleton.
+
+Given this treatment, the Kalman filter can be rewritten yet again: given the following 3 kernels
+\begin{equation}
+    \label{kalman-mappings}
+    h\circ f\circ x:
+    ([],[])
+    \xmapsto[\gaussian(\hat{x}_-, \hat{P}_-)]{[]}
+    \gaussian(\hat{x}_-, \hat{P}_-)
+    \xmapsto[\gaussian(0,Q)]{F}
+    \gaussian(\bar{x}, \bar{P})
+    \xmapsto[\gaussian(0,R)]{H}
+    \gaussian(\bar{z}, S)
+\end{equation}
+the Bayesian inversion of $h$ with respect to $f\circ x$ is $h^\dagger$ as given in Equation \ref{kalman-dagger}.
 
 \subsection{Assumptions}
 
