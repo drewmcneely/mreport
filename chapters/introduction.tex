@@ -37,6 +37,8 @@ Here we really only consider a single time step $k$ within the algorithm, as the
 
 Remark: $Q$ and $R$ are not strictly positive-definite, but they are relaxed to being positive semi-definite. This allows for the case where there actually is certainty, be it complete certainty or certainty within a subspace. This can also be extended to uninformative priors, again as in \cite{extended-gaussian}.
 
+Remark: In traditional treatments of the Kalman filter, $\{w_k\}_k$ and $\{v_k\}_k$ are viewed as Gaussian processes, meaning the entire history of each sequence is jointly sampled from a single probability space. This means that correlation between different time steps need to be taken into consideration. It is assumed that disturbances are Markov, meaning that each $w_k$ is independent from $w_j$ at another timestep $j$, or in other words that $E(w_kw_j^T) = 0$ for $k\neq j$. In our basic categorical treatment of filtering, this Markovian aspect will be implied, as all kernels are Markov kernels. The only way to get autocorrelation in a process will be to explicitly specify that a distribution is a member of a joint space. When we consider Markov categories as applied to stochastic processes, things may change.
+
 Our posterior knowledge of the state is characterized by a Gaussian uncertainty.
 Thus at the current time step, the posterior knowledge from the prievious timestep is given as $\gaussian(\hat{x}_-, \hat{P}_-)$.
 This is pushed through the dynamic model in Equation \ref{kalman-filter-model} to get the prior belief $\gaussian(\bar{x}, \bar{P})$ of the state at the current time step, with
@@ -48,21 +50,18 @@ This is pushed through the dynamic model in Equation \ref{kalman-filter-model} t
 Further, this then gets propagated to our belief on where the measurement will fall, $\gaussian(\bar{z}, S)$ with
 \begin{align}
 	\label{kalman-filter-measurement-push}
-	\bar{z} = H\bar{x}\\
-	S = H\bar{P} H^T + R
+	\bar{z} &= H\bar{x}\\
+	S &= H\bar{P} H^T + R
 \end{align}
 our belief on where the measurement will fall, $\gaussian(\bar{z}, S)$ with
 
 This next part we will present in a way that's slightly rearranged from common texts, but which sets the stage or further generalizing the filter.
 In particular, typically a measurement error is defined as $\tilde{y} = z - \bar{z}$, but we define the following:
 
-\begin{equation}
-	K = \bar{P}H^T S^{-1}
-\end{equation}
-
-\begin{equation}
-	\tilde{x} = \bar{x} - K\bar{z}
-\end{equation}
+\begin{align}
+	K &= \bar{P}H^T S^{-1}\\
+	\tilde{x} &= \bar{x} - K\bar{z}
+\end{align}
 
 We then get our posterior estimate
 
@@ -181,6 +180,7 @@ Remark: there is some practicality to note. Ultimately, $\probfunc$ will be cons
 \todo[inline]{This will be about the assumptions made in the kernels. They're decorated linear maps, or can be thought of as linear maps with additive gaussean noise. We want to generalize to any generic mapping between classes of knowledge representaitons.}
 
 \section{Abstract Programming}
+\todo[inline]{Write this. Make it general, Describe the figure}
 
 \begin{figure}[htb]
     \includegraphics[width=0.5\textwidth]{algorithm-inheritance}
@@ -189,6 +189,7 @@ Remark: there is some practicality to note. Ultimately, $\probfunc$ will be cons
 \end{figure}
 
 \section{Looking at Markov Transition Kernels}
+\todo[inline]{Eliminate this or incorporate into previous}
 
 There is often some conflation between conditionals and transition kernels.
 In a way, they are often considered to be developments from the basics of probability.
