@@ -179,13 +179,52 @@ Remark: there is some practicality to note. Ultimately, $\probfunc$ will be cons
 
 \todo[inline]{This will be about the assumptions made in the kernels. They're decorated linear maps, or can be thought of as linear maps with additive gaussean noise. We want to generalize to any generic mapping between classes of knowledge representaitons.}
 
+We can make similar generalizations that we made above. In the Kalman filter, a kernel is thought of as a linear map with additive noise, through which we defined a map $f:\gaussian X\rightarrow \gaussian Y$. Imposed on the underlying maps were a restrictive linear structure, which made them well defined on a restricted class of probability distributions. If we strip away as many assumptions as we can, while keeping the notion that we are mapping between classes of distributions, then we are left with kernels $f:\probfunc X \rightarrow \probfunc Y$, that is, a generic map between generic families of probability distributions over generic spaces. Coming back to the questions from Section \ref{kalman-filter-kernels}, the reformulation of the Kalman filter therein allows us to generalize to a generic formulation to a generic filter:
+
+Say a system has a state space $X$, where $X$ can be a finite dimensional vector space, Hilbert space, manifold, topological space, or any other kind of structure. We take measurements in a space $Y$, which also can have some exotic structure, and $\probfunc X$ and $\probfunc Y$ are classes of uncertainty distributions on $X$ and $Y$ respectively. $\probfunc X$ can be the class of subsets (aka the powerset), collection of probability measures, convexly weighted finite subsets, Gaussian distributions, whatever. We have some prior knowledge of a system state, $x\in \probfunc X$, a dynamics model $f:\probfunc X\rightarrow \probfunc X$, and a measurement model $h:\probfunc X\rightarrow \probfunc Z$. What structures do these things need at an absolute minimum for us to do filtering? Can we compose them in a way to automatically form a Bayesian inversion $h^\dagger : \probfunc Z\rightarrow \probfunc X$ through which we can feed our measurement and get out an updated posterior? If this can be achieved through function composition, then this can be automated. We can write a computer program into which we feed dynamics and measurement models, and from which we recieve update laws. This could greatly reduce the amount of analysis required to find new estimation algorithms. Further, the door could be opened for more algorithms involving stochastic dynamical systems to be composed in such a fashion.
+
+The answer to the first question in the previous paragraph: what's the minimal structure the kernels need for filtering, is known. The kernels need to form a Markov category with conditionals. This will be explored in Section \ref{categories}. And the second question is also answered here. We indeed can write filtering programs at a higher level: not just programs that take in states and give estimates, but programs that take in models and give update laws. We will discuss the basics behind a framework in Section \ref{abstract programming}.
+
 \section{Abstract Programming}
 \todo[inline]{Write this. Make it general, Describe the figure}
 
+This thesis presents a framework for programming estimation algorithms in a way that splits the high level structure of for instance a recursive filter, from the low level implementation of uncertainty representation. This framework works in such a way that code from the high level gets inherited by the low level. In the case of the Kalman filter, the abstract side of the framework involves high level plumbing and composing of generic kernels to create an update law. 
+\todo[inline]{Chapter 2, background, will have an abstract programming section that will go more in-depth. It will talk about the interface between the two levels which provides the protocol aka the categorical structure in which kernels should conform, so that low level and high level can talk. We won't talk about the interface here.}
+\todo[inline]{There are further thoughts for the framework. In detail, the Kalman filter code contains 4 parts: The high level recursive filter algorithm, the low level Gaussian kernel implementation, the interface that tells the low level which methods to implement and provides those methods to the high level, and the implementation code that says "f has these matrices, h has those matrices, here's my prior, and here are my measurements." Put this in a further section}
+
+The low level involves creating a datatype to represent Gaussian transition kernels. 
+\todo[inline]{Continue this thought....}
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{ccc}
+	Abstract Algorithms &               & Concrete Representations \\ \hline
+	Recursive Estimator & $\Rightarrow$ & Gaussians               
+    \end{tabular}
+\end{table}
+
+\begin{table}[]
+\centering
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{rcl}
+Abstract Algorithms &  & Concrete Representations \\ \hline
+Recursive Estimator &  & Gaussians \\
+Batch Estimator &  & Unscented Transforms \\
+Stochastic Control Problem Formulation &  & Gaussian Mixtures \\
+Causal Inference & $\Rightarrow$ & FinStoch \\
+Model Estimation &  & Particles \\
+&  & Unscented Mixtures \\
+&  & Higher Order Uncertainty \\
+&  & Possibility \\
+&  & Linear Approximated Gaussians
+\end{tabular}%
+}
+\end{table}
+
 \begin{figure}[htb]
-    \includegraphics[width=0.5\textwidth]{algorithm-inheritance}
-	\caption{}
-    \label{fig:algorithm-inheritance}
+\includegraphics[width=0.5\textwidth]{algorithm-inheritance}
+\caption{}
+\label{fig:algorithm-inheritance}
 \end{figure}
 
 \section{Looking at Markov Transition Kernels}
