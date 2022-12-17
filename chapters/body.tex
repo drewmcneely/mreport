@@ -34,6 +34,20 @@ This approach is described as "context rich and content poor"\todo{cite youtube 
 
 \section{Markov Categories}
 
+Markov categories are categories in which the morphisms behave like stochastic kernels.
+There are in fact Markov categories that have too restrictive of a structure to represent the probability we're interested in, but we can build a Markov category out of the kernels that we model problems with for computation.
+When we formulate problems in terms of Markov categories, we can then revert to the language of category theory and abstract away the details of which computations the morphisms in a particular Markov category represent.
+
+More specifically, a good way to think about a Markov category is that the objects represent classes of distributions\footnote{While most of the time objects are enumerated by the underlying statespace (or dimension for that matter), it's helpful to think of them as the collections of distributions themselves}, and the morphisms are mappings between them.
+
+For example, the spaces and mappings discussed in Section \ref{the kalman filter kernels section} form the Markov category $\gausscat$.
+Each object is $\gaussian X$, the collection of Gaussian distributions on the vector space $X$.
+The morphisms are the kernels specified in Equations \ref{gaussian kernels}.
+
+\subsection{Definition}
+
+A Markov category is a symmetric monoidal category with comonoidal objects.
+
 \subsection{Example: Set}
 \subsection{Kleisli Categories}
 
@@ -106,7 +120,70 @@ f = (\id_x \otimes f_x) \circ \left[\left(\comul_x \circ (\id_x\otimes \counit_Y
 \section{Discrete Probability}
 \section{Gaussian Probability}
 \section{Gaussian Mixtures: A Composition of Discrete and Gaussian Probability}
-\section{Unscented Transform}
+
+The framework in this section was developed with much help from Tobias Fritz in the Category theory Zulip channel \cite{zulip}
+
+We now develop Gaussian mixtures in purely abstract terms.
+First let's discuss Gaussian mixtures concretely.
+
+A basic explanation of Gaussian mixtures is that a Gaussian mixture distribution is a convex combination of Gaussian distributions.
+More formally, if we have $p_i: I\rightarrow X$, then a Gaussian mixture distribution can be defined as
+\begin{equation}
+    p = \sum_i w_i | p_i \rangle
+\end{equation}
+where every $w_i \geq 0$, and $\sum_i w_i = 1$.
+Here we use the ket notation as in \cite{cho-jacobs}.
+This can be interpreted as a point-wise summation on the PDFs of the Gaussians, or we can keep it as a formal sum ie.\ a sequence of pairs.
+
+Notice that the collection of these convex combinations is precisely the finite distribution monad $\distributionmonad$ applied not to the space $X$, but seemingly to the collection of Gaussians $\gaussian X$.
+
+\subsection{Distributive Laws}
+
+A first approach would to be try distributive laws.
+In essence, these allow you to compose monads.
+This unfortunately will not work for Gaussian mixtures for several reasons, but this can still yield us new Markov categories by combining old ones.
+
+Given two monads $(S,\mu^S, \eta^S)$ and $(T, \mu^T,\eta^T)$, a distributive law of $S$ over $T$ is a natural transformation
+\begin{equation}
+    l:TS\rightarrow ST
+\end{equation}
+satisfying certain conditions. \todo{Should I write these conditions? Probably if I want to prove the following.}
+
+An important feature here is that we can compose the monads, at least in one direction as $ST$, to form a new monad.
+In partcular, the join and unit NTs become
+\begin{align}
+    \mu^{ST} &: STST \xrightarrow{SlT} SSTT \xrightarrow{\mu^S \mu^T} ST\\
+    \eta^{ST} &: 1\xrightarrow{\eta^S\eta^T}ST
+\end{align}
+
+Remember that Markov categories arise from symmetric monoidal affine monads on other Markov categories.
+Thus, if $T,\ S\in C$ are symmetric monoidal affine monads, with laxators $\laxator^T$ and $\laxator^S$ respectively, then $ST$ will\todo{prove this} become symmetric monoidal affine with
+\begin{equation}
+    \laxator^{ST}_{X,Y} : STX \otimes STY \xrightarrow{\laxator^S_{TX,TY}}
+    S(TX\otimes TY) \xrightarrow{S\laxator^T_{X,Y}} ST(X\otimes Y)
+\end{equation}
+
+Thus, we can now compose two probability monads to make a third.
+Unfortunately, however, this will not help us with Gaussian mixtures.
+For one, $\gaussian$ is not an endofunctor, and $\gausscat$ is not a Kleisli category.
+We simply abuse the notation for convenience.
+And even if we were to try to treat $\gaussian$ as an endofunctor, the composition wouldn't make sense.
+The distributive law $l$ requires the functor compositions to go both ways. 
+It would make sense to construct $\distributionmonad\gaussian X$ as a convex combination of Gaussian distributions on $X$, but not so much for $\gaussian \distributionmonad X$, a Gaussian distribution of convex combinations of $X$'s.
+
+Still, we should push this further. Let's try to come up with conditioning on $ST$.
+\todo[inline]{Dr. Bakolas this is where I need help}
+
+\subsection{Markov functor}
+
+What if we have a Markov functor to another Markov category, and then apply a monoidal monad to its image?
+This should work, but it still won't give us what we want I don't think.
+
+\subsection{Monads Applied to Hom Sets}
+
+One way that will work with Gaussian mixtures is to use a hom set construction.
+
+If we consider a Markov category $C$, then the space of distributions on $X\in C$ is equivalent to the hom set $C(1,X)$.
 
 \chapter{Programming with Markov Categories}
 \section{Making Datatypes}
@@ -114,7 +191,8 @@ f = (\id_x \otimes f_x) \circ \left[\left(\comul_x \circ (\id_x\otimes \counit_Y
 \subsection{Unscented}
 \subsection{Gaussian Mixtures}
 
+
 \section{Synthetic Algorithms Used in Estimation and Control}
 \subsection{Filtering}
+\subsection{Batch Estimation}
 \subsection{History Space}
-
