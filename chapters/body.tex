@@ -1,5 +1,66 @@
 \chapter{Background}
+
+\section{Monoids}
+
+We begin our background with a review on monoids.
+Monoids are pervasive in category theory, and we will see themes and elements from the basic monoid construction in practically every following definition.
+This comes from a simple fact: functions form monoids.
+
+The monoid is one of the most basic and rudimentary algebraic structures that can be endowed on a set.
+It consists of an associative binary operator and an identity element.
+
+More formally, given a set $X$, a monoid is a tuple $(X,\cdot, e)$ where $\cdot:X\times X\rightarrow X$ is the aforementioned binary operator satisfying
+\begin{equation}
+	(x\cdot y)\cdot z = x\cdot(y\cdot z)
+\end{equation}
+for all $x,y,z\in X$,
+and $e\in X$ is an identity element satisfying
+\begin{equation}
+	e\cdot x = x\cdot e = x
+\end{equation}
+for all $x\in X$.
+
+In the spirit of moving towards category theory in which we shy away from working with elements and reason with functions, we can equivalently write the identity element as a function from the singleton set $e: \singletonset \rightarrow X$.
+If we rename the binary operator to a variable name such as $m$ so that we think of it more like a function in the traditional sense, then the above associativity and identity relations can be rewritten as the following commuting diagrams:
+\todo[inline]{Make commuting diagrams with m and e, using function pairings (m,e) etc for the products}
+
+A basic example is the natural numbers with addition: $(\naturals, +, 0)$ forms a monoid.
+Notice that multiplication also works, and $(\naturals, \times, 1)$ forms a monoid structure as well.
+The $0$ and the $1$ elements interact in such a way as to form a rig.
+
+A more important example is functions. The space of endofunctions $X^X := \{f:X\rightarrow X\}$ forms a monoid with function composition $(X^X, \circ, \id)$, where $\id$ is the identity function that does nothing.
+
+Another important example is sets themselves, with Cartesian product and the singleton set.
+If we denote the class\footnote{Later, category} of sets as $\Set$, then $(\Set, \times, \singletonset)$ form a monoid.
+Rather, it's not quite strictly a monoid, because we have a loosening of the associativity and identity conditions.
+Notice how the set $X\times(Y\times Z)$ is equal to the set of points $\{(x,(y,z)):x\in X, y\in Y, z\in Z\}$, whereas
+$(X\times Y)\times Z = \{((x,y),z):x\in X, y\in Y, z\in Z\}$.
+They're not quite equal to each other.
+They are, however, naturally isomorphic, meaning that for each set $X$ $Y$ and $Z$, there is an associator isomorphism $\alpha_{X,Y,Z}: (X\times Y)\times Z \rightarrow X\times (Y\times Z)$ which maps tuples of elements as $\alpha : ((x,y),z) \mapsto (x,(y,z))$.
+Being an isomorphism, this map is invertible.
+
+Similarly, notice how $\singletonset \times X = \{(\cdot, x):x\in X\}$ and $X\times \singletonset = \{(x,\cdot):x\in X\}$, which both are not identical to $X$.
+However, for each $X$ there are unit isomorphisms $\eta_{l;X} : \singletonset \times X \rightarrow X$ with $\eta_{l;X} : (\cdot, x) \rightarrow x$ and $\eta_{r;X} : X \times \singletonset \rightarrow X$ with $\eta_{r;X} : (x,\cdot) \rightarrow x$ which absorb the singleton element.
+These are also easily invertible.
+
+We typically hand-wave all these details away in the math world, especially if we treat all nested tuples as automatically flattening and all singleton elements as automatically absorbing.
+However, if we were to formalize Cartesian products in a programming language, then we would either need to specify this nested flattening or we would need to program in unit and associator isomorphisms and be extremely careful in applying them so that the types match correctly.
+
+We should also note that as Cartesian products involve making pairs of elements, we can also make pairs of functions:
+for $f : X\rightarrow Y$ and $g:A\rightarrow B$, we can form the function $(f,g) : X\times A \rightarrow Y\times B$ with $(f,g)((x,a)) = (f(x), g(a))$.
+From now on, we will instead write this as $f\times g$, to relate it back to the Cartesian product.
+This shows that the Cartesian product is actually bifunctorial, which makes $\Set$ a monoidal category.
+
+\subsection{Symmetric monoids}
+
+A monoid is symmetric if $x\cdot y = y\cdot x$.
+
+In our above examples, notice that $(\naturals, +,0$ is indeed symmetric, as $a+b=b+a$, but $(X^X, \circ, \id)$ is not, because order matters in composition: $f\circ g \neq g\circ f$.
+
+For $\Set$, we have a similar situation to above: it's not strictly symmetric, but for every $X$ and $Y$ there's a swap natural isomorphism $\sigma_{X,Y} : X\times Y \rightarrow Y\times X$ with $\sigma_{X,Y} : (x,y) \mapsto (y,x)$.
+
 \section{Category Theory}
+
 \subsection{Categories}
 
 A category formally is a collection of objects and morphisms that follow a composition law \cite{context}. \todo{Expand on this. Should I give an actual definition of an abstract category? I probably should}
@@ -25,12 +86,12 @@ This approach is described as "context rich and content poor"\todo{cite youtube 
 \todo[inline]{Talk about functional programming}
 \todo[inline]{Talk about how Markov categories are cats with markov kernels}
 
-\subsection{Functors}
-\subsubsection{Example Functors}
-\subsection{Monoidal Functors}
-\subsection{Natural Transformations}
-\subsection{Monads}
-\subsection{Kleisli Categories}
+%\subsection{Functors}
+%\subsubsection{Example Functors}
+%\subsection{Monoidal Functors}
+%\subsection{Natural Transformations}
+%\subsection{Monads}
+%\subsection{Kleisli Categories}
 
 \section{Markov Categories}
 
@@ -47,6 +108,70 @@ The morphisms are the kernels specified in Equations \ref{gaussian kernels}.
 \subsection{Definition}
 
 A Markov category is a symmetric monoidal category with comonoidal objects.
+Practically, we should break this definition up into its components and axioms.
+
+\subsubsection{A Markov category is a category}
+
+A category is made out of objects and morphisms that go between them.
+For our practial purposes our Markov categories will be concrete, meaning that the objects represent sample spaces and the morphisms represent mappings between them.
+In literature, objects are typically given names that correspond to the underlying sample space such as $X$ and $Y$.
+This is particularly appropriate for deterministic categories such as $\Set$, which is indeed a Markov category, but the categories we're interested in should represent transition kernels between classes of distributions.
+Thus, for clarity, throughout this section we will think of objects with capital letters $X$, $Y$, etc.\ as sets, and the objects in our Markov category will be labeled as $\probfunc X$, $\probfunc Y$, etc.\ to emphasize that we are thinking of them as classes of distributions on the underlying sets.
+
+Thus, a Markov category is composed of classes of distributions $\probfunc X$, $\probfunc Y$, etc.\ and transition kernels between them that look like $f:\probfunc X \rightarrow \probfunc Y$.
+
+In our program, this means we will be creating two datatypes: one that constructs kernels, and one that \emph{parameterizes} the underlying spaces.
+We do not need to make a datatype for the underlying space itself.
+We will see why later.
+
+For example, for $\gausscat$, we will make a datatype representing the kernels that look like Equation \ref{gaussian kernels}.
+We will also need a datatype whose elements parameterize all the spaces $\gaussian X$, but we don't need a separate datatype for each $\gaussian X$ itself.
+Since the underlying spaces $X$ are just relabelings of $\reals^n$, every class of Gaussian distributions can be uniquely labeled by the dimenision $n$ of its underlying space.
+Thus, it is sufficient to parameterize the classes of Gaussian distributions by the natural numbers $\naturals$.
+
+The basic axioms that must be satisfied are composition and identity:
+for every $f:\probfunc X \rightarrow \probfunc Y$ and $g:\probfunc Y \rightarrow \probfunc Z$, there must be another kernel from $\probfunc X$ to $\probfunc Z$ that we denote $g\circ f$.
+
+Composition must be associative, ie.
+\begin{equation}
+	(h\circ g)\circ f = h\circ (g\circ f)
+\end{equation}
+for all $f,g,h$ where their types line up.
+
+In our program, this means that we must make a method for composing two kernels, and they must satisfy associativity.
+
+Categories also have identity morphisms.
+For every space $X$, there must be a "do nothing" kernel $\id_X : \probfunc X \rightarrow \probfunc X$ that satisfies
+\begin{align}
+	\id_X \circ f &= f\\
+	g\circ \id_X &= g
+\end{align}
+for all $f:\probfunc W\rightarrow \probfunc X$ and $g:\probfunc X\rightarrow \probfunc Y$.
+
+In our program, we must create a constructor method `id()` that takes in the parameter that represents $X$ and creates a respective identity function.
+It may seem trivial and unnecessary to require such a constructor.
+This kernel does afterall represent doing nothing.
+However, its is extremely important as we will use it to build more complicated kernels.
+
+\subsubsection{A Markov category is symmetric monoidal}
+
+A symmetric monoidal category is a category in which the objects form a (not necessarily strict) symmetric monoid, much like the $\Set$ example in Section \ref{monoids}.
+
+So in our Markov category, for every class of distributions $\probfunc X$ and $\probfunc Y$, there must be a class $\probfunc (X\times Y)$.
+This corresponds to the class of distributions over the joint states.
+
+Notice that the Cartesian product is placed inside the probability functor.
+We could well have a category where where the monoidal structure gives objects $\probfunc X \times \probfunc Y$, but these are a bit too strict for our purposes.
+In fact, $\Set$ itself is indeed a Markov category, with its monoidal structure being a direct Cartesian product.
+However, there are further conditions on the universality of the Cartesian product that make $\Set$ just a bit too strict to form an interesting Markov category.
+In particular, as will be discussed below, an element $z\in X\times Y$ can be reconstructed if we only know its projections $\pi_l(z) = x$ and $\pi_r(z) = y$.
+We will get similar projection operators in our less-deterministic Markov category, which correspond to marginialization, but we cannot reconstruct a probability distribution from its marginals.
+Therefore, to undercut the probability functor, in some cases we will need to introduce a zipping function $\laxator_{X,Y} : \probfunc X\times \probfunc Y\rightarrow \probfunc(X\times Y)$, also called a laxator, to refactor our data.
+This may or may not be discussed more below. I haven't decided yet.
+
+In monoidal categories, not only does 
+
+\subsubsection{Objects in a Markov category are comonoids}
 
 \subsection{Example: Set}
 \subsection{Kleisli Categories}
@@ -184,6 +309,11 @@ This should work, but it still won't give us what we want I don't think.
 One way that will work with Gaussian mixtures is to use a hom set construction.
 
 If we consider a Markov category $C$, then the space of distributions on $X\in C$ is equivalent to the hom set $C(1,X)$.
+We can then apply our functor $T$ to this: thus the space of mixtures on $X$ is $TC(1,X)$.
+If we apply $T$ to the kernels, then we will get a different construction to above: $TC(X,Y)$ represents the probability monad $T$ applied to the kernels.
+Thus, for Gaussian mixtures, a kernel in $\distributionmonad \gausscat(X,Y)$ would be a convex combination of Gaussian kernels.\footnote{I hypothesize that this corresponds to the kernels in multiple model filters.}
+
+
 
 \chapter{Programming with Markov Categories}
 \section{Making Datatypes}
