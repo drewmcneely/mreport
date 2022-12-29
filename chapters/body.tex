@@ -169,7 +169,14 @@ We will get similar projection operators in our less-deterministic Markov catego
 Therefore, to undercut the probability functor, in some cases we will need to introduce a zipping function $\laxator_{X,Y} : \probfunc X\times \probfunc Y\rightarrow \probfunc(X\times Y)$, also called a laxator, to refactor our data.
 This may or may not be discussed more below. I haven't decided yet.
 
-In monoidal categories, not only does 
+In monoidal categories, not only do the objects form a monoid, but this has to be compatible with morphisms.
+Similar to in $\Set$, the monoidal product needs to be a bifunctor.
+This can be as simple as the pairing for Cartesian products in $\Set$, but for our purposes we will again for now just make it exist under the probability functor.
+
+So, for all $f:\probfunc X \rightarrow \probfunc Y$ and $g: \probfunc A \rightarrow \probfunc B$, we need to be able to create a parallel product $f\otimes g$, which will for now have the signature $f\otimes g : \probfunc(X\times A) \rightarrow \probfunc(Y\times B)$
+This encapsulates parallel composition, in contrast with serial composition given by the $\circ$ operator.
+In our progam, therefore we will need to create a parallel composition method that takes in two kernels and returns a third kernel with the corresponding type signature.
+For here, the types do not need to line up like they did in serial composition.
 
 \subsubsection{Objects in a Markov category are comonoids}
 
